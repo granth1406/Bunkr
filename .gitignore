@@ -1,27 +1,18 @@
-# Ignore compiled binary files
-*.exe
-*.out
-*.o
-*.obj
-*.dll
-*.so
+# Ignore environment files
+.env
 
-# Ignore build directories
-/build/
-/dist/
 
-# Ignore editor and system-specific files
+# Ignore Node.js dependencies
+backend/node_modules
+
+# Ignore log files
 *.log
-*.tmp
-*.swp
+npm-debug.log*
+
+# Ignore compiled files
+dist/
+build/
+
+# Ignore system files
 .DS_Store
 Thumbs.db
-
-# Ignore CMake files
-CMakeCache.txt
-CMakeFiles/
-
-# Ignore user-specific config files
-*.vcxproj
-*.vcxproj.user
-*.code-workspace
