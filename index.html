@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f2f5;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .card {
+      animation: zoomIn 0.6s ease-in-out both;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+      border: none;
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .hover-scale:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease-in-out;
+    }
+    .dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .dark-mode .card {
+      background-color: #1f1f1f;
+      color: #ffffff;
+    }
+    .neon-mode {
+      background-color: #050505;
+      color: #39ff14;
+    }
+    .neon-mode .card {
+      background-color: #111;
+      color: #39ff14;
+      box-shadow: 0 0 20px #39ff14;
+    }
+    .progress-bar {
+      transition: width 0.6s ease;
+    }
+    .bounce {
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .glow {
+      box-shadow: 0 0 12px #ffce00;
+    }
+    .theme-switch {
+      display: flex;
+      gap: 10px;
+    }
+    .theme-switch button {
+      border-radius: 50px;
+      font-weight: 600;
+    }
+    table.table td {
+      vertical-align: middle;
+    }
+    h3 {
+      font-weight: 600;
+      border-left: 5px solid #0d6efd;
+      padding-left: 10px;
+    }
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+    .navbar-nav .nav-link {
+      font-weight: 500;
+    }
+    input.form-control {
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    button.btn {
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+    <a class="navbar-brand fw-bold" href="#">🎓 Attendance Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#entry">Entry</a></li>
+        <li class="nav-item"><a class="nav-link" href="#bunk">Bunk Calc</a></li>
+        <li class="nav-item"><a class="nav-link" href="#alerts">Alerts</a></li>
+        <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
+        <li class="nav-item"><a class="nav-link" href="#graph">Graph</a></li>
+      </ul>
+      <div class="theme-switch ms-3">
+        <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
+        <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
+        <button class="btn btn-outline-success bounce glow" onclick="setTheme('neon')">🟢</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Existing body content -->
+  <div class="container my-5" id="dashboard">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>Total Attendance</h5>
+          <h2 id="totalPercentage">0%</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>Safe Bunk Limit</h5>
+          <h2 id="safeBunk">0 Classes</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>Upcoming Class</h5>
+          <p>10:30 AM - DBMS</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container my-5" id="entry">
+    <h3 class="mb-4">Attendance Entry</h3>
+    <form class="mb-4">
+      <div class="row g-3">
+        <div class="col-md-4"><input id="subject" type="text" class="form-control" placeholder="Subject"/></div>
+        <div class="col-md-4"><input id="totalClasses" type="number" class="form-control" placeholder="Total Classes"/></div>
+        <div class="col-md-4"><input id="attendedClasses" type="number" class="form-control" placeholder="Attended Classes"/></div>
+      </div>
+      <div class="progress mt-4">
+        <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+      </div>
+      <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
+    </form>
+  </div>
+
+  <div class="container my-5" id="bunk">
+    <h3 class="mb-4">Safe Bunk Calculator</h3>
+    <form>
+      <div class="row g-3">
+        <div class="col-md-3"><input type="number" id="requiredPercent" class="form-control" placeholder="Required %"></div>
+        <div class="col-md-3"><input type="number" id="bunkTotal" class="form-control" placeholder="Total Classes"></div>
+        <div class="col-md-3"><input type="number" id="bunkAttended" class="form-control" placeholder="Attended"></div>
+        <div class="col-md-3"><div class="output fs-4" id="bunkResult">Can bunk: <span id="bunkNum">0</span> classes</div></div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container my-5" id="alerts">
+    <h3 class="mb-4">Reminders & Alerts</h3>
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="toggleAlerts">
+      <label class="form-check-label" for="toggleAlerts">Enable Alerts</label>
+    </div>
+    <div class="card p-3">
+      <h5>⚠️ Low Attendance</h5>
+      <p>You're at 74%. Attend the next 2 classes to stay above 75%.</p>
+    </div>
+  </div>
+
+  <div class="container my-5" id="schedule">
+    <h3 class="mb-4">Class Schedule - CSE-1-G3</h3>
+    <table class="table table-bordered text-center">
+      <thead>
+        <tr><th>Day</th><th>9-10</th><th>10-11</th><th>11-12</th><th>12-1</th><th>2-3</th><th>3-4</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mon</td><td>OS</td><td colspan="2">DE&T</td><td>DECA</td><td colspan="2">CP Lab</td></tr>
+        <tr><td>Tue</td><td>DE&T</td><td colspan="2">DECA Lab</td><td>DECA</td><td colspan="2">CP</td></tr>
+        <tr><td>Wed</td><td colspan="2">CP Lab</td><td>--</td><td>SCM Lab</td><td colspan="2">--</td></tr>
+        <tr><td>Thu</td><td>DECA</td><td>DE&T</td><td>OS</td><td>--</td><td colspan="2">SCM Lab</td></tr>
+        <tr><td>Fri</td><td>--</td><td>DE&T</td><td>CP</td><td>--</td><td colspan="2">DECA Lab</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Attendance Graph -->
+  <div class="container my-5" id="graph">
+    <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
+    <canvas id="attendanceChart" height="100"></canvas>
+  </div>
+
+  <script>
+    const chartCtx = document.getElementById('attendanceChart').getContext('2d');
+    let attendanceChart = new Chart(chartCtx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Attendance %',
+          backgroundColor: '#0d6efd',
+          borderColor: '#0d6efd',
+          borderWidth: 1,
+          data: []
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        }
+      }
+    });
+
+    function syncAttendance() {
+      const total = parseInt(document.getElementById("totalClasses").value);
+      const attended = parseInt(document.getElementById("attendedClasses").value);
+      const subject = document.getElementById("subject").value;
+      if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
+        const percentage = Math.min(Math.round((attended / total) * 100), 100);
+        document.getElementById("progressBar").style.width = percentage + "%";
+        document.getElementById("progressBar").innerText = percentage + "%";
+        document.getElementById("totalPercentage").innerText = percentage + "%";
+        let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
+        document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
+
+        const labelIndex = attendanceChart.data.labels.indexOf(subject);
+        if (labelIndex >= 0) {
+          attendanceChart.data.datasets[0].data[labelIndex] = percentage;
+        } else {
+          attendanceChart.data.labels.push(subject);
+          attendanceChart.data.datasets[0].data.push(percentage);
+        }
+        attendanceChart.update();
+      }
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('theme', theme);
+      document.body.classList.remove('dark-mode', 'neon-mode');
+      if (theme === 'dark') document.body.classList.add('dark-mode');
+      else if (theme === 'neon') document.body.classList.add('neon-mode');
+    }
+
+    window.onload = () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      setTheme(theme);
+    };
+
+    document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
+      input.addEventListener('input', () => {
+        const r = parseFloat(document.getElementById("requiredPercent").value);
+        const t = parseInt(document.getElementById("bunkTotal").value);
+        const a = parseInt(document.getElementById("bunkAttended").value);
+        if (!isNaN(r) && !isNaN(t) && !isNaN(a) && r > 0 && t > 0) {
+          let safe = Math.floor((a - (r / 100) * t) / (1 - (r / 100)));
+          document.getElementById("bunkNum").innerText = safe >= 0 ? safe : 0;
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
