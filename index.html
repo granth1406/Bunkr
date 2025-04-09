@@ -37,12 +37,12 @@
     }
     .neon-mode {
       background-color: #050505;
-      color: #39ff14;
+      color: #00ffff;
     }
     .neon-mode .card {
       background-color: #111;
-      color: #39ff14;
-      box-shadow: 0 0 20px #39ff14;
+      color: #00ffff;
+      box-shadow: 0 0 20px #00ffff;
     }
     .progress-bar {
       transition: width 0.6s ease;
@@ -55,7 +55,7 @@
       50% { transform: translateY(-6px); }
     }
     .glow {
-      box-shadow: 0 0 12px #ffce00;
+      box-shadow: 0 0 12px #00ffff;
     }
     .theme-switch {
       display: flex;
@@ -107,12 +107,12 @@
       <div class="theme-switch ms-3">
         <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
         <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
-        <button class="btn btn-outline-success bounce glow" onclick="setTheme('neon')">🟢</button>
+        <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
       </div>
     </div>
   </nav>
 
-  <!-- Existing body content -->
+  <!-- Dashboard -->
   <div class="container my-5" id="dashboard">
     <div class="row g-4">
       <div class="col-md-4">
@@ -136,6 +136,7 @@
     </div>
   </div>
 
+  <!-- Attendance Entry -->
   <div class="container my-5" id="entry">
     <h3 class="mb-4">Attendance Entry</h3>
     <form class="mb-4">
@@ -151,6 +152,7 @@
     </form>
   </div>
 
+  <!-- Bunk Calculator -->
   <div class="container my-5" id="bunk">
     <h3 class="mb-4">Safe Bunk Calculator</h3>
     <form>
@@ -163,6 +165,7 @@
     </form>
   </div>
 
+  <!-- Alerts -->
   <div class="container my-5" id="alerts">
     <h3 class="mb-4">Reminders & Alerts</h3>
     <div class="form-check form-switch mb-3">
@@ -175,6 +178,7 @@
     </div>
   </div>
 
+  <!-- Schedule -->
   <div class="container my-5" id="schedule">
     <h3 class="mb-4">Class Schedule</h3>
     <table class="table table-bordered text-center">
