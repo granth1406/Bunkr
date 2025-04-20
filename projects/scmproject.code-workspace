@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp"
+		},
+		"workbench.quickOpen.preserveInput": false,
+		"search.quickAccess.preserveInput": false,
+		"workbench.commandPalette.preserveInput": false
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			
+
+		]
+	}
+}
