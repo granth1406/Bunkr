@@ -149,6 +149,7 @@
         <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
       </div>
       <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
+      <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="clearData()">🗑️ Reset</button>
     </form>
   </div>
 
@@ -205,6 +206,11 @@
 
     let attendanceData = []
 
+    const clearData = () => {
+      localStorage.removeItem("attendance")
+      attendanceData = [];
+      location.reload();
+    }
     function saveToLocalStorage() {
       localStorage.setItem('attendance', JSON.stringify(attendanceData))
     }
