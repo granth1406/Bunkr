@@ -278,6 +278,22 @@
     window.onload = () => {
       const theme = localStorage.getItem('theme') || 'light';
       setTheme(theme);
+      const saved = localStorage.getItem("attendance")
+      if (saved) {
+        attendanceData = JSON.parse(saved);
+        attendanceData.forEach(item => {
+          attendanceChart.data.labels.push(item.subject);
+          attendanceChart.data.datasets[0].data.push(item.percentage);
+        });
+        attendanceChart.update()
+
+        const last = attendanceData[attendanceData.length -1]
+        document.getElementById("progressBar").style.width = last.percentage + "%";
+        document.getElementById("progressBar").innerText = last.percentage + "%";
+        document.getElementById("totalPercentage").innerText = last.percentage + "%";
+        let safeBunk = Math.floor((last.attended - (0.75 * last.total))/0.25);
+        document.getElementById("safeBunk").innerText = safeBunk > 0 ? `${safeBunk} Classes`: `0 Classes`
+      }
     };
 
     document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
