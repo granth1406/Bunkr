@@ -202,6 +202,13 @@
   </div>
 
   <script>
+
+    let attendanceData = []
+
+    function saveToLocalStorage() {
+      localStorage.setItem('attendance', JSON.stringify(attendanceData))
+    }
+
     const chartCtx = document.getElementById('attendanceChart').getContext('2d');
     let attendanceChart = new Chart(chartCtx, {
       type: 'bar',
@@ -233,9 +240,18 @@
       const subject = document.getElementById("subject").value;
       if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
         const percentage = Math.min(Math.round((attended / total) * 100), 100);
+
+        const entryIndex = attendanceData.findIndex(item => item.subject === subject)
+        if(entryIndex >= 0){
+          attendanceData[entryIndex] = { subject, total, attended, percentage }
+        } else {
+          attendanceData.push({subject, total, attended, percentage })
+        }
+
         document.getElementById("progressBar").style.width = percentage + "%";
         document.getElementById("progressBar").innerText = percentage + "%";
         document.getElementById("totalPercentage").innerText = percentage + "%";
+
         let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
         document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
 
@@ -247,6 +263,8 @@
           attendanceChart.data.datasets[0].data.push(percentage);
         }
         attendanceChart.update();
+
+        saveToLocalStorage();
       }
     }
 
