@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ßunkr</title>
+
+  <!-- Bootstrap & Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Styles -->
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -54,9 +58,7 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
-    .glow {
-      box-shadow: 0 0 12px #00ffff;
-    }
+    .glow { box-shadow: 0 0 12px #00ffff; }
     .theme-switch {
       display: flex;
       gap: 10px;
@@ -73,11 +75,10 @@
       border-left: 5px solid #0d6efd;
       padding-left: 10px;
     }
-    .navbar-brand {
-      font-size: 1.5rem;
-    }
+    .navbar-brand { font-size: 1.5rem; }
     .navbar-nav .nav-link {
       font-weight: 500;
+      cursor: pointer;
     }
     input.form-control {
       border-radius: 10px;
@@ -86,229 +87,267 @@
     button.btn {
       border-radius: 12px;
     }
+    .section { display: none; }
+    .section.active { display: block; }
   </style>
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-    <a class="navbar-brand fw-bold" href="#">ßunkr</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="#entry">Entry</a></li>
-        <li class="nav-item"><a class="nav-link" href="#bunk">Bunk Calculator</a></li>
-        <li class="nav-item"><a class="nav-link" href="#alerts">Alerts</a></li>
-        <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
-        <li class="nav-item"><a class="nav-link" href="#graph">Graph</a></li>
-      </ul>
-      <div class="theme-switch ms-3">
-        <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
-        <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
-        <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
-      </div>
-    </div>
-  </nav>
 
-  <!-- Dashboard -->
-  <div class="container my-5" id="dashboard">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Total Attendance</h5>
-          <h2 id="totalPercentage">0%</h2>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Safe Bunk Limit</h5>
-          <h2 id="safeBunk">0 Classes</h2>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Upcoming Class</h5>
-          <p>2:00 PM - OS</p>
-        </div>
-      </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+  <a class="navbar-brand fw-bold" href="#">ßunkr</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" data-target="dashboard">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="entry">Entry</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="bunk">Bunk Calculator</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="alerts">Alerts</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="schedule">Schedule</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="graph">Graph</a></li>
+    </ul>
+    <div class="theme-switch ms-3">
+      <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
+      <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
+      <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
     </div>
   </div>
+</nav>
 
-  <!-- Attendance Entry -->
-  <div class="container my-5" id="entry">
-    <h3 class="mb-4">Attendance Entry</h3>
-    <form class="mb-4">
-      <div class="row g-3">
-        <div class="col-md-4"><input id="subject" type="text" class="form-control" placeholder="Subject"/></div>
-        <div class="col-md-4"><input id="totalClasses" type="number" class="form-control" placeholder="Total Classes"/></div>
-        <div class="col-md-4"><input id="attendedClasses" type="number" class="form-control" placeholder="Attended Classes"/></div>
-      </div>
-      <div class="progress mt-4">
-        <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
-      </div>
-      <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
-    </form>
-  </div>
-
-  <!-- Bunk Calculator -->
-  <div class="container my-5" id="bunk">
-    <h3 class="mb-4">Safe Bunk Calculator</h3>
-    <form>
-      <div class="row g-3">
-        <div class="col-md-3"><input type="number" id="requiredPercent" class="form-control" placeholder="Required %"></div>
-        <div class="col-md-3"><input type="number" id="bunkTotal" class="form-control" placeholder="Total Classes"></div>
-        <div class="col-md-3"><input type="number" id="bunkAttended" class="form-control" placeholder="Attended"></div>
-        <div class="col-md-3"><div class="output fs-4" id="bunkResult">Can bunk: <span id="bunkNum">0</span> classes</div></div>
-      </div>
-    </form>
-  </div>
-
-  <!-- Alerts -->
-  <div class="container my-5" id="alerts">
-    <h3 class="mb-4">Reminders & Alerts</h3>
-    <div class="form-check form-switch mb-3">
-      <input class="form-check-input" type="checkbox" id="toggleAlerts">
-      <label class="form-check-label" for="toggleAlerts">Enable Alerts</label>
+<!-- Dashboard -->
+<div class="container my-5 section active" id="dashboard">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Total Attendance</h5><h2 id="totalPercentage">0%</h2></div>
     </div>
-    <div class="card p-3">
-      <h5>⚠️ Low Attendance</h5>
-      <p>You're at 74%. Attend the next 2 classes to stay above 75%.</p>
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Safe Bunk Limit</h5><h2 id="safeBunk">0 Classes</h2></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Upcoming Class</h5><p>2:00 PM - OS</p></div>
     </div>
   </div>
+</div>
 
-  <!-- Schedule -->
-  <div class="container my-5" id="schedule">
-    <h3 class="mb-4">Class Schedule</h3>
-    <table class="table table-bordered text-center">
-      <thead>
-        <tr><th>Day</th><th>9-10</th><th>10-11</th><th>11-12</th><th>12-1</th><th>2-3</th><th>3-4</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Mon</td><td>OS</td><td colspan="2">DE&T</td><td>DECA</td><td colspan="2">CP Lab</td></tr>
-        <tr><td>Tue</td><td>DE&T</td><td colspan="2">DECA Lab</td><td>DECA</td><td colspan="2">CP</td></tr>
-        <tr><td>Wed</td><td colspan="2">CP Lab</td><td>--</td><td>SCM Lab</td><td colspan="2">--</td></tr>
-        <tr><td>Thu</td><td>DECA</td><td>DE&T</td><td>OS</td><td>--</td><td colspan="2">SCM Lab</td></tr>
-        <tr><td>Fri</td><td>--</td><td>DE&T</td><td>CP</td><td>--</td><td colspan="2">DECA Lab</td></tr>
-      </tbody>
-    </table>
+<!-- Attendance Entry -->
+<div class="container my-5 section" id="entry">
+  <h3 class="mb-4">Attendance Entry</h3>
+  <form class="mb-4">
+    <div class="row g-3">
+      <div class="col-md-4"><input id="subject" type="text" class="form-control" placeholder="Subject"/></div>
+      <div class="col-md-4"><input id="totalClasses" type="number" class="form-control" placeholder="Total Classes"/></div>
+      <div class="col-md-4"><input id="attendedClasses" type="number" class="form-control" placeholder="Attended Classes"/></div>
+    </div>
+    <div class="progress mt-4"><div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div></div>
+    <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
+  </form>
+</div>
+
+<!-- Bunk Calculator -->
+<div class="container my-5 section" id="bunk">
+  <h3 class="mb-4">Safe Bunk Calculator</h3>
+  <form>
+    <div class="row g-3">
+      <div class="col-md-3"><input type="number" id="requiredPercent" class="form-control" placeholder="Required %"></div>
+      <div class="col-md-3"><input type="number" id="bunkTotal" class="form-control" placeholder="Total Classes"></div>
+      <div class="col-md-3"><input type="number" id="bunkAttended" class="form-control" placeholder="Attended"></div>
+      <div class="col-md-3"><div class="output fs-4" id="bunkResult">Can bunk: <span id="bunkNum">0</span> classes</div></div>
+    </div>
+  </form>
+</div>
+
+<!-- Alerts -->
+<div class="container my-5 section" id="alerts">
+  <h3 class="mb-4">Reminders & Alerts</h3>
+  <div class="form-check form-switch mb-3">
+    <input class="form-check-input" type="checkbox" id="toggleAlerts" checked>
+    <label class="form-check-label" for="toggleAlerts">Enable Alerts</label>
   </div>
+  <div id="alertContainer"></div>
+</div>
 
-  <!-- Attendance Graph -->
-  <div class="container my-5" id="graph">
-    <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
-    <canvas id="attendanceChart" height="100"></canvas>
+<!-- Schedule -->
+<div class="container my-5 section" id="schedule">
+  <h3 class="mb-4">Class Schedule</h3>
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr><th>Day</th><th>9-10</th><th>10-11</th><th>11-12</th><th>12-1</th><th>2-3</th><th>3-4</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Mon</td><td>OS</td><td colspan="2">DE&T</td><td>DECA</td><td colspan="2">CP Lab</td></tr>
+      <tr><td>Tue</td><td>DE&T</td><td colspan="2"></td><td>DECA</td><td colspan="2">CP</td></tr>
+      <tr><td>Wed</td><td colspan="2">CP Lab</td><td>--</td><td>SCM Lab</td><td colspan="2">--</td></tr>
+      <tr><td>Thu</td><td>DECA</td><td>DE&T</td><td>OS</td><td>--</td><td colspan="2">SCM Lab</td></tr>
+      <tr><td>Fri</td><td>--</td><td>DE&T</td><td>CP</td><td>--</td><td colspan="2">DECA Lab</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Graph -->
+<div class="container my-5 section" id="graph">
+  <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
+  <canvas id="attendanceChart" height="100"></canvas>
+  <div class="mt-4 d-flex gap-3">
+    <select id="removeSubjectDropdown" class="form-select w-auto"></select>
+    <button class="btn btn-danger" onclick="removeSubject()">Remove</button>
   </div>
+</div>
 
-  <script>
+<!-- JavaScript -->
+<script>
+  let attendanceData = [];
 
-    let attendanceData = []
-
-    function saveToLocalStorage() {
-      localStorage.setItem('attendance', JSON.stringify(attendanceData))
+  const chartCtx = document.getElementById('attendanceChart').getContext('2d');
+  let attendanceChart = new Chart(chartCtx, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Attendance %',
+        backgroundColor: '#0d6efd',
+        borderColor: '#0d6efd',
+        borderWidth: 1,
+        data: []
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { enabled: true }},
+      scales: { y: { beginAtZero: true, max: 100 }}
     }
+  });
 
-    const chartCtx = document.getElementById('attendanceChart').getContext('2d');
-    let attendanceChart = new Chart(chartCtx, {
-      type: 'bar',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Attendance %',
-          backgroundColor: '#0d6efd',
-          borderColor: '#0d6efd',
-          borderWidth: 1,
-          data: []
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        },
-        scales: {
-          y: { beginAtZero: true, max: 100 }
-        }
+  function saveToLocalStorage() {
+    localStorage.setItem('attendance', JSON.stringify(attendanceData));
+  }
+
+  function syncAttendance() {
+    const total = parseInt(document.getElementById("totalClasses").value);
+    const attended = parseInt(document.getElementById("attendedClasses").value);
+    const subject = document.getElementById("subject").value;
+    if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
+      const percentage = Math.min(Math.round((attended / total) * 100), 100);
+      const entryIndex = attendanceData.findIndex(item => item.subject === subject);
+      if(entryIndex >= 0) attendanceData[entryIndex] = { subject, total, attended, percentage };
+      else attendanceData.push({ subject, total, attended, percentage });
+
+      document.getElementById("progressBar").style.width = percentage + "%";
+      document.getElementById("progressBar").innerText = percentage + "%";
+      document.getElementById("totalPercentage").innerText = percentage + "%";
+
+      let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
+      document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
+
+      const labelIndex = attendanceChart.data.labels.indexOf(subject);
+      if (labelIndex >= 0) {
+        attendanceChart.data.datasets[0].data[labelIndex] = percentage;
+      } else {
+        attendanceChart.data.labels.push(subject);
+        attendanceChart.data.datasets[0].data.push(percentage);
+      }
+      attendanceChart.update();
+      updateRemoveDropdown();
+      saveToLocalStorage();
+      showAlerts();
+    }
+  }
+
+  function removeSubject() {
+    const selected = document.getElementById("removeSubjectDropdown").value;
+    if (!selected) return;
+    attendanceData = attendanceData.filter(item => item.subject !== selected);
+    const idx = attendanceChart.data.labels.indexOf(selected);
+    if (idx !== -1) {
+      attendanceChart.data.labels.splice(idx, 1);
+      attendanceChart.data.datasets[0].data.splice(idx, 1);
+      attendanceChart.update();
+      updateRemoveDropdown();
+      saveToLocalStorage();
+      showAlerts();
+    }
+  }
+
+  function updateRemoveDropdown() {
+    const dropdown = document.getElementById("removeSubjectDropdown");
+    dropdown.innerHTML = "";
+    attendanceData.forEach(item => {
+      let opt = document.createElement("option");
+      opt.value = opt.innerText = item.subject;
+      dropdown.appendChild(opt);
+    });
+  }
+
+  function setTheme(theme) {
+    localStorage.setItem('theme', theme);
+    document.body.classList.remove('dark-mode', 'neon-mode');
+    if (theme === 'dark') document.body.classList.add('dark-mode');
+    else if (theme === 'neon') document.body.classList.add('neon-mode');
+  }
+
+  function showAlerts() {
+    const alertsOn = document.getElementById("toggleAlerts").checked;
+    const alertContainer = document.getElementById("alertContainer");
+    alertContainer.innerHTML = "";
+    if (!alertsOn) return;
+    attendanceData.forEach(item => {
+      if (item.percentage < 75) {
+        const div = document.createElement("div");
+        div.className = "card p-3 mb-3";
+        div.innerHTML = `<h5>⚠️ Low Attendance in ${item.subject}</h5>
+          <p>You're at ${item.percentage}%. Attend more classes to stay above 75%.</p>`;
+        alertContainer.appendChild(div);
       }
     });
+  }
 
-    function syncAttendance() {
-      const total = parseInt(document.getElementById("totalClasses").value);
-      const attended = parseInt(document.getElementById("attendedClasses").value);
-      const subject = document.getElementById("subject").value;
-      if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
-        const percentage = Math.min(Math.round((attended / total) * 100), 100);
-
-        const entryIndex = attendanceData.findIndex(item => item.subject === subject)
-        if(entryIndex >= 0){
-          attendanceData[entryIndex] = { subject, total, attended, percentage }
-        } else {
-          attendanceData.push({subject, total, attended, percentage })
-        }
-
-        document.getElementById("progressBar").style.width = percentage + "%";
-        document.getElementById("progressBar").innerText = percentage + "%";
-        document.getElementById("totalPercentage").innerText = percentage + "%";
-
-        let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
-        document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
-
-        const labelIndex = attendanceChart.data.labels.indexOf(subject);
-        if (labelIndex >= 0) {
-          attendanceChart.data.datasets[0].data[labelIndex] = percentage;
-        } else {
-          attendanceChart.data.labels.push(subject);
-          attendanceChart.data.datasets[0].data.push(percentage);
-        }
-        attendanceChart.update();
-
-        saveToLocalStorage();
-      }
-    }
-
-    function setTheme(theme) {
-      localStorage.setItem('theme', theme);
-      document.body.classList.remove('dark-mode', 'neon-mode');
-      if (theme === 'dark') document.body.classList.add('dark-mode');
-      else if (theme === 'neon') document.body.classList.add('neon-mode');
-    }
-
-    window.onload = () => {
-      const theme = localStorage.getItem('theme') || 'light';
-      setTheme(theme);
-      const saved = localStorage.getItem("attendance")
-      if (saved) {
-        attendanceData = JSON.parse(saved);
-        attendanceData.forEach(item => {
-          attendanceChart.data.labels.push(item.subject);
-          attendanceChart.data.datasets[0].data.push(item.percentage);
-        });
-        attendanceChart.update()
-
-        const last = attendanceData[attendanceData.length -1]
-        document.getElementById("progressBar").style.width = last.percentage + "%";
-        document.getElementById("progressBar").innerText = last.percentage + "%";
-        document.getElementById("totalPercentage").innerText = last.percentage + "%";
-        let safeBunk = Math.floor((last.attended - (0.75 * last.total))/0.25);
-        document.getElementById("safeBunk").innerText = safeBunk > 0 ? `${safeBunk} Classes`: `0 Classes`
-      }
-    };
-
-    document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
-      input.addEventListener('input', () => {
-        const r = parseFloat(document.getElementById("requiredPercent").value);
-        const t = parseInt(document.getElementById("bunkTotal").value);
-        const a = parseInt(document.getElementById("bunkAttended").value);
-        if (!isNaN(r) && !isNaN(t) && !isNaN(a) && r > 0 && t > 0) {
-          let safe = Math.floor((a - (r / 100) * t) / (1 - (r / 100)));
-          document.getElementById("bunkNum").innerText = safe >= 0 ? safe : 0;
-        }
+  window.onload = () => {
+    const theme = localStorage.getItem('theme') || 'light';
+    setTheme(theme);
+    const saved = localStorage.getItem("attendance");
+    if (saved) {
+      attendanceData = JSON.parse(saved);
+      attendanceData.forEach(item => {
+        attendanceChart.data.labels.push(item.subject);
+        attendanceChart.data.datasets[0].data.push(item.percentage);
       });
-    });
-  </script>
+      attendanceChart.update();
+      updateRemoveDropdown();
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      const last = attendanceData[attendanceData.length - 1];
+      document.getElementById("progressBar").style.width = last.percentage + "%";
+      document.getElementById("progressBar").innerText = last.percentage + "%";
+      document.getElementById("totalPercentage").innerText = last.percentage + "%";
+      let safeBunk = Math.floor((last.attended - (0.75 * last.total))/0.25);
+      document.getElementById("safeBunk").innerText = safeBunk > 0 ? `${safeBunk} Classes` : `0 Classes`;
+
+      showAlerts();
+    }
+  };
+
+  document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
+    input.addEventListener('input', () => {
+      const r = parseFloat(document.getElementById("requiredPercent").value);
+      const t = parseInt(document.getElementById("bunkTotal").value);
+      const a = parseInt(document.getElementById("bunkAttended").value);
+      if (!isNaN(r) && !isNaN(t) && !isNaN(a) && r > 0 && t > 0) {
+        let safe = Math.floor((a - (r / 100) * t) / (1 - (r / 100)));
+        document.getElementById("bunkNum").innerText = safe >= 0 ? safe : 0;
+      }
+    });
+  });
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const target = link.getAttribute('data-target');
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+    });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
