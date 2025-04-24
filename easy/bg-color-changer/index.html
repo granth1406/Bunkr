@@ -1,0 +1,109 @@
+<!-- <head>
+    <style>
+        *{
+            border: 0;
+            margin: 0;
+            padding: 0;
+            font-family:'Courier New', Courier, monospace;
+        }
+        body{
+            display: grid;
+            align-items: center;
+            gap: 10px;
+            grid-template-columns: .8fr 2fr;
+            margin: 10px;
+        }
+        #clr{
+            /* background-color: red; */
+            height: 90%;
+            border: 3px black solid;
+            border-radius: 5%;
+        }
+        #paint-screen{
+            /* background-color: blue; */
+            height: 90%;
+            border: 3px black solid;
+            border-radius: 30px;
+        }
+        #btn-div{
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            margin: 10px;
+            justify-content: center;
+            align-items: center;
+            width: full;
+        }
+        button{
+            margin: 3px;
+            padding: 4px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            width: 70%;
+            font-weight: 500;
+            font-size: large;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            background-color: rgb(46, 46, 230);
+            font-size: larger;
+            font-weight: bolder;
+        }
+        .add-btn{
+            width: 50%;
+        }
+        .main{
+            z-index: 999;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="clr">
+        <div id="btn-div">
+            <button data-color="red">red</button>
+            <button data-color="blue">blue</button>
+            <button data-color="green">green</button>
+            <button id="add-btn">+</button>
+        </div>
+    </div>
+    <div id="paint-screen">
+
+    </div>    
+    
+    <script>
+        const paintScreen = document.getElementById("paint-screen")
+        document.querySelectorAll("button[data-color]").forEach(button => {
+            button.addEventListener("click", () => {
+                const color = button.getAttribute("data-color")
+                paintScreen.style.backgroundColor = color;
+            })
+        })
+        document.getElementById("add-btn").addEventListener("click", () => {
+
+        })
+    </script>
+</body> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="root">
+        <div id="clr">
+            <div id="btn-div">
+                <button data-color="red">red</button>
+                <button data-color="blue">blue</button>
+                <button data-color="green">green</button>
+                <button id="add-btn">+</button>
+            </div>
+        </div>
+        <div id="paint-screen"></div>    
+    </div>
+    
+</body>
+</html>
