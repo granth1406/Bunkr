@@ -98,6 +98,44 @@
   animation: fadeIn 0.6s ease;
   }
 
+  .navbar {
+    border-radius: 20px;
+    margin: 20px;
+    padding: 15px 30px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+  }
+  .navbar-light .navbar-nav .nav-link {
+    margin: 0 10px;
+    padding: 8px 15px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    font-weight: 500;
+    color: #333;
+  }
+  .navbar-light .navbar-nav .nav-link:hover, 
+  .navbar-light .navbar-nav .nav-link.active {
+    background-color: #0d6efd;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+  }
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0d6efd;
+    letter-spacing: 1px;
+  }
+  .theme-switch .btn {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   </style>
 </head>
 
@@ -345,16 +383,14 @@
       attendanceChart.update();
       updateRemoveDropdown();
 
+      // Update Dashboard with the last entered subject
       const last = attendanceData[attendanceData.length - 1];
-      document.getElementById("progressBar").style.width = last.percentage + "%";
-      document.getElementById("progressBar").innerText = last.percentage + "%";
       document.getElementById("totalPercentage").innerText = last.percentage + "%";
-      let safeBunk = Math.floor((last.attended - (0.75 * last.total))/0.25);
-      document.getElementById("safeBunk").innerText = safeBunk > 0 ? `${safeBunk} Classes` : `0 Classes`;
-
-      showAlerts();
+      let safeBunks = Math.floor(((last.attended - (0.75 * last.total)) / 0.25));
+      document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
     }
-  };
+    showAlerts();
+};
 
   document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
     input.addEventListener('input', () => {
