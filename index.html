@@ -126,7 +126,7 @@
   }
   .navbar-light .navbar-nav .nav-link:hover, 
   .navbar-light .navbar-nav .nav-link.active {
-    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    background: linear-gradient(135deg, #0d6efd, #4be0ed);
     color: #fff;
     box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
     transform: translateY(-2px);
@@ -163,7 +163,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-  <a class="navbar-brand fw-bold" href="#">ßunkr</a>
+  <a class="navbar-brand fw-bold">ßunkr</a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -214,17 +214,47 @@
   </form>
 </div>
 
-<!-- Bunk Calculator -->
+<!-- Bunk Calculator Section -->
 <div class="container my-5 section" id="bunk">
-  <h3 class="mb-4">Safe Bunk Calculator</h3>
-  <form>
-    <div class="row g-3">
-      <div class="col-md-3"><input type="number" id="requiredPercent" class="form-control" placeholder="Required %"></div>
-      <div class="col-md-3"><input type="number" id="bunkTotal" class="form-control" placeholder="Total Classes"></div>
-      <div class="col-md-3"><input type="number" id="bunkAttended" class="form-control" placeholder="Attended"></div>
-      <div class="col-md-3"><div class="output fs-4" id="bunkResult">Can bunk: <span id="bunkNum">0</span> classes</div></div>
+  <h3 class="mb-4">Bunk Calculator</h3>
+  <div class="card p-4">
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label for="requiredPercent" class="form-label">Required Attendance Percentage</label>
+        <input type="number" id="requiredPercent" class="form-control" placeholder="75" value="75" min="1" max="100">
+      </div>
+      <div class="col-md-6">
+        <label for="totalSemClasses" class="form-label">Total Classes in Semester</label>
+        <input type="number" id="totalSemClasses" class="form-control" placeholder="Total classes in semester">
+      </div>
+      <div class="col-md-6">
+        <label for="classesSoFar" class="form-label">Classes Conducted So Far</label>
+        <input type="number" id="classesSoFar" class="form-control" placeholder="Classes conducted so far">
+      </div>
+      <div class="col-md-6">
+        <label for="attendedSoFar" class="form-label">Classes Attended So Far</label>
+        <input type="number" id="attendedSoFar" class="form-control" placeholder="Classes attended so far">
+      </div>
     </div>
-  </form>
+    <button class="btn btn-primary hover-scale" id="calcBunk">Calculate Bunkable Classes</button>
+    
+    <div class="card mt-4 p-3" id="bunkResult" style="display: none;">
+      <h5 class="mb-3">Results</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Current Attendance:</strong> <span id="currentPercent">0</span>%</p>
+          <p><strong>Classes you can bunk:</strong> <span id="bunkNum">0</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Safe bunk limit:</strong> <span id="safeBunkLimit">0</span> classes</p>
+          <p><strong>Attendance if you bunk all:</strong> <span id="finalPercent">0</span>%</p>
+        </div>
+      </div>
+      <div class="progress mt-2">
+        <div id="bunkProgressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Alerts -->
@@ -410,34 +440,101 @@
       document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
     }
     showAlerts();
-};
+  };
 
-  document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
-    input.addEventListener('input', () => {
-      const r = parseFloat(document.getElementById("requiredPercent").value);
-      const t = parseInt(document.getElementById("bunkTotal").value);
-      const a = parseInt(document.getElementById("bunkAttended").value);
-      if (!isNaN(r) && !isNaN(t) && !isNaN(a) && r > 0 && t > 0) {
-        let safe = Math.floor((a - (r / 100) * t) / (1 - (r / 100)));
-        document.getElementById("bunkNum").innerText = safe >= 0 ? safe : 0;
-      }
-    });
+  // Bunk Calculator Logic
+  document.getElementById('calcBunk').addEventListener('click', () => {
+    const requiredPercent = parseFloat(document.getElementById('requiredPercent').value) / 100;
+    const totalSemClasses = parseInt(document.getElementById('totalSemClasses').value);
+    const classesSoFar = parseInt(document.getElementById('classesSoFar').value);
+    const attendedSoFar = parseInt(document.getElementById('attendedSoFar').value);
+    
+    if (isNaN(requiredPercent)) {
+      alert('Please enter required attendance percentage!');
+      return;
+    }
+    
+    if (isNaN(totalSemClasses) || isNaN(classesSoFar) || isNaN(attendedSoFar)) {
+      alert('Please enter valid numbers for all fields!');
+      return;
+    }
+    
+    if (classesSoFar > totalSemClasses) {
+      alert('Classes conducted so far cannot be greater than total semester classes!');
+      return;
+    }
+    
+    if (attendedSoFar > classesSoFar) {
+      alert('Attended classes cannot be greater than classes conducted!');
+      return;
+    }
+    
+    // Calculate current attendance percentage
+    const currentPercent = (attendedSoFar / classesSoFar) * 100;
+    
+    // Calculate remaining classes
+    const remainingClasses = totalSemClasses - classesSoFar;
+    
+    // Calculate minimum classes needed to attend to meet requirement
+    const totalRequired = Math.ceil(totalSemClasses * requiredPercent);
+    const stillNeed = Math.max(0, totalRequired - attendedSoFar);
+    
+    // Calculate maximum bunkable classes
+    let bunkable = 0;
+    if (stillNeed <= remainingClasses) {
+      bunkable = remainingClasses - stillNeed;
+    }
+    
+    // Calculate final attendance percentage if all bunkable classes are bunked
+    const finalAttended = attendedSoFar + stillNeed;
+    const finalPercent = (finalAttended / totalSemClasses) * 100;
+    
+    // Calculate safe bunk limit (75% attendance)
+    const safeBunkLimit = Math.floor(((attendedSoFar - (0.75 * classesSoFar)) / 0.25));
+    
+    // Display results
+    document.getElementById('currentPercent').textContent = currentPercent.toFixed(1);
+    document.getElementById('bunkNum').textContent = bunkable;
+    document.getElementById('safeBunkLimit').textContent = safeBunkLimit > 0 ? safeBunkLimit : 0;
+    document.getElementById('finalPercent').textContent = finalPercent.toFixed(1);
+    
+    // Update progress bar
+    const progressBar = document.getElementById('bunkProgressBar');
+    progressBar.style.width = currentPercent + '%';
+    progressBar.textContent = currentPercent.toFixed(1) + '%';
+    
+    // Color progress bar based on attendance
+    if (currentPercent >= 75) {
+      progressBar.classList.remove('bg-warning', 'bg-danger');
+      progressBar.classList.add('bg-success');
+    } else if (currentPercent >= 50) {
+      progressBar.classList.remove('bg-success', 'bg-danger');
+      progressBar.classList.add('bg-warning');
+    } else {
+      progressBar.classList.remove('bg-success', 'bg-warning');
+      progressBar.classList.add('bg-danger');
+    }
+    
+    // Show results card
+    document.getElementById('bunkResult').style.display = 'block';
   });
 
   const sections = document.querySelectorAll('.section');
-const links = document.querySelectorAll('.navbar-nav .nav-link');
+  const links = document.querySelectorAll('.navbar-nav .nav-link');
 
-links.forEach(link => {
-  link.addEventListener('click', () => {
-    const target = link.getAttribute('data-target');
-    sections.forEach(section => {
-      section.classList.remove('active', 'fade-in');
-      if (section.id === target) {
-        section.classList.add('active', 'fade-in');
-      }
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      const target = link.getAttribute('data-target');
+      sections.forEach(section => {
+        section.classList.remove('active', 'fade-in');
+        if (section.id === target) {
+          section.classList.add('active', 'fade-in');
+        }
+      });
     });
   });
-});
+
+  
 
 </script>
 
