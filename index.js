@@ -81,11 +81,17 @@ function updateRemoveDropdown() {
 }
 
 function setTheme(theme) {
-  localStorage.setItem('theme', theme);
   document.body.classList.remove('dark-mode', 'neon-mode');
   if (theme === 'dark') document.body.classList.add('dark-mode');
   else if (theme === 'neon') document.body.classList.add('neon-mode');
-  chainBackground.updateTheme(theme);
+  
+  // Update background theme
+  import('./background3d.js').then(module => {
+      module.default.updateTheme(theme);
+  });
+  
+  // Save theme preference
+  localStorage.setItem('theme', theme);
 }
 
 function showAlerts() {
