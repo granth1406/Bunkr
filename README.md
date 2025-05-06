@@ -12,6 +12,8 @@ cd SCM_Project
 
  Instructions on how to run the project.
 
+ - > Use Open Server for local view
+
  License
 
  MIT or any other applicable license.
