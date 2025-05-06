@@ -3,10 +3,12 @@
 A smart attendance tracking system
 
 ## Installation
+
 ```sh
 git clone https://github.com/granth1406/SCM_Project.git
-cd repository-name
+cd SCM_Project
  Usage
+```
 
  Instructions on how to run the project.
 
