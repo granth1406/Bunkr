@@ -11,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="background3d.js" type="module"></script>
+  <script src="about3D.js" type="module"></script>
 
   <!-- CSS File -->
    <link rel="stylesheet" href="index.css">
@@ -239,67 +240,125 @@
 </div>
 
 <!-- About Us -->
-<div class="container my-5 section" id="about">
-  <h3 class="mb-4">About Us</h3>
-  <p><strong>ßunkr</strong> is a modern and intuitive attendance tracking platform crafted especially for students. Our mission is to empower students with the tools they need to manage their academic schedules effectively and maintain a healthy balance between studies and personal life.</p>
-  <br>
-  <p>With ßunkr, students can:</p>
-  <ul>
-    <li>Monitor their attendance across multiple subjects in real-time.</li>
-    <li>Calculate the number of safe bunks available without risking attendance requirements.</li>
-    <li>Set up personalized reminders and alerts for upcoming classes and important deadlines.</li>
-    <li>Visualize their attendance data through dynamic and easy-to-understand graphs and analytics.</li>
-    <li>Plan their daily and weekly class schedules efficiently.</li>
-  </ul>
-
-  <p>Our team is dedicated to continuously improving ßunkr, introducing new features, enhancing user experience, and ensuring that students have everything they need to succeed academically. We believe that better attendance management leads to better academic outcomes — and we're here to make that journey simple, smart, and even fun.</p>
-
-  <p><em>Join thousands of students who trust ßunkr to keep them on track. Your academic success, simplified!</em></p>
+<div class="container-fluid section" id="about">
+  <div class="about-wrapper">
+    <h2 class="text-center mb-5">About The Team</h2>
+    
+    <!-- 3D Container with increased height -->
+    <div class="about-3d-container">
+      <canvas id="about3DCanvas"></canvas>
+    </div>
+    
+    <!-- Team Info Cards -->
+    <div class="team-info mt-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>Frontend Developer</h3>
+            <p>Building beautiful and responsive user interfaces</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>Backend Developer</h3>
+            <p>Creating robust and scalable server solutions</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>UI/UX Designer</h3>
+            <p>Crafting intuitive and engaging user experiences</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Game Zone -->
 <div class="container my-5 section" id="game-zone">
+  <h3 class="mb-4">Game Zone 🎮</h3>
+  
+  <!-- Game Navigation -->
+  <div class="nav nav-tabs mb-4" id="gamesTabs" role="tablist">
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#screenPaint">Screen Paint</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pokemonSearch">Pokemon Search</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#quizTime">Quiz Time</button>
+  </div>
 
-  <h3 class="mb-4">Screen Paint</h3>
-
-  <div class="screen-paint">
-    <div class="root">
-      <div id="clr">
-        <div id="btn-div">
-  <div class="screen-paint">
-    <div class="root">
-      <div id="clr">
-        <div id="btn-div">
-          <button data-color="red">red</button>
-          <button data-color="blue">blue</button>
-          <button data-color="green">green</button>
+  <!-- Games Content -->
+  <div class="tab-content" id="gamesContent">
+    <!-- Screen Paint -->
+    <div class="tab-pane fade show active" id="screenPaint">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Screen Paint</h4>
+          <div class="screen-paint">
+            <div class="root">
+              <div id="clr">
+                <div id="btn-div">
+                  <button class="btn btn-danger mb-2" data-color="red">Red</button>
+                  <button class="btn btn-primary mb-2" data-color="blue">Blue</button>
+                  <button class="btn btn-success mb-2" data-color="green">Green</button>
+                  <button class="btn btn-secondary mb-2" onclick="openColorModal()">Add Color</button>
+                </div>
+              </div>
+              <div id="paint-screen" class="border rounded"></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="paint-screen"></div>    
     </div>
 
-    <div id="popup">
-      <div class="modal">
-        <h2>Add a color</h2>
-        <input type="text" placeholder="Enter color" id="color-input">
-        <br>
-        <button onclick="submitColor()">Add</button>
-        <button onclick="closeModal()">Close</button>
+    <!-- Pokemon Search -->
+    <div class="tab-pane fade" id="pokemonSearch">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Pokemon Search</h4>
+          <div class="app-container">
+            <iframe src="https://pokemoninformation.vercel.app/" 
+                    width="100%" 
+                    height="500px" 
+                    style="border:none;"
+                    title="Pokemon Search Game">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Time -->
+    <div class="tab-pane fade" id="quizTime">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Quiz Time</h4>
+          <div id="quiz-container">
+            <!-- Quiz content will be loaded here -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <br>
-  <br>
-  <h3 class="mb-4">Pokemon Search</h3>
-  <div class="app-container" style="height: 500px;">
-    <iframe src="https://pokemoninformation.vercel.app/" width="100%" height="500px" style="border:none;"></iframe>
-  </div>
-  <br>
-  <br>
-  <h3 class="mb-4">Quiz Time</h3>
-  
-</div>
 
+  <!-- Color Modal -->
+  <div class="modal fade" id="colorModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a Color</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" id="color-input" placeholder="Enter color name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitColor()">Add Color</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- JavaScript -->
 <script src="index.js"></script>
