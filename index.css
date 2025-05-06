@@ -142,3 +142,92 @@ outline: none;
 background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 30 30'%3e%3cpath stroke='%230d6efd' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+.screen-paint * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.screen-paint {
+    height: 500px;
+    background-color: rgb(185, 209, 221);
+}
+
+.screen-paint .root {
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: 0.8fr 2fr;
+    margin: 10px;
+    height: 100%;
+}
+
+.screen-paint #clr {
+    background-color: rgb(237, 211, 60);
+    border: 3px black solid;
+    border-radius: 30px;
+    height: 90%;
+}
+
+.screen-paint #paint-screen {
+    background-color: white;
+    border: 3px black solid;
+    height: 90%;
+    border-radius: 30px;
+}
+
+.screen-paint #btn-div {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.screen-paint button {
+    margin: 3px;
+    padding: 8px;
+    width: 70%;
+    font-size: larger;
+    font-weight: bolder;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(46, 46, 230);
+}
+
+.screen-paint #popup {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.screen-paint .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 15px rgba(0, 0, 0, 0.25);
+    min-width: 250px;
+    text-align: center;
+    z-index: 999;
+}
+
+.screen-paint .modal input {
+    padding: 8px;
+    margin: 10px 0;
+    width: 80%;
+}
+
+.screen-paint .modal button {
+    margin: 5px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
