@@ -85,18 +85,18 @@ animation: fadeIn 0.6s ease;
 }
 
 .navbar {
-border-radius: 20px;
-margin: 20px;
-padding: 15px 30px;
-background: rgba(255, 255, 255, 0.8); /* Glass effect */
+background: rgba(255, 255, 255, 0.1) !important;
 backdrop-filter: blur(10px);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-transition: all 0.4s ease;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+transition: all 0.3s ease;
 }
 .navbar-brand {
 font-size: 2rem;
-font-weight: 800;
-color: #0d6efd;
+font-weight: 700;
+background: linear-gradient(45deg, #2d3436, #0984e3);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+position: relative;
 letter-spacing: 1px;
 text-shadow: 0 2px 5px rgba(13, 110, 253, 0.3);
 }
@@ -140,6 +140,56 @@ outline: none;
 }
 .navbar-toggler-icon {
 background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 30 30'%3e%3cpath stroke='%230d6efd' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.nav-link {
+position: relative;
+padding: 0.5rem 1rem;
+margin: 0 0.2rem;
+transition: all 0.3s ease;
+}
+
+.nav-link::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: 50%;
+width: 0;
+height: 2px;
+background: #0984e3;
+transition: all 0.3s ease;
+transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+width: 100%;
+}
+
+/* Theme-specific navbar styles */
+.dark-mode .navbar {
+background: rgba(20, 20, 20, 0.8) !important;
+}
+
+.dark-mode .navbar-brand {
+background: linear-gradient(45deg, #74b9ff, #0984e3);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.neon-mode .navbar {
+background: rgba(10, 10, 20, 0.8) !important;
+}
+
+.neon-mode .navbar-brand {
+background: linear-gradient(45deg, #00fff0, #0984e3);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.neon-mode .nav-link::after {
+background: #00ffff;
+box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .screen-paint * {

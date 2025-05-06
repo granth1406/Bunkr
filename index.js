@@ -85,6 +85,7 @@ function setTheme(theme) {
   document.body.classList.remove('dark-mode', 'neon-mode');
   if (theme === 'dark') document.body.classList.add('dark-mode');
   else if (theme === 'neon') document.body.classList.add('neon-mode');
+  chainBackground.updateTheme(theme);
 }
 
 function showAlerts() {
@@ -260,4 +261,249 @@ document.addEventListener("DOMContentLoaded", () => {
     // Event listener for modal buttons
     screenPaint.querySelector(".modal button:nth-child(1)").addEventListener("click", submitColor);
     screenPaint.querySelector(".modal button:nth-child(2)").addEventListener("click", closeModal);
+});
+
+// Add at the end of your existing JavaScript
+const chainBackground = new ChainBackground();
+
+class ScheduleManager {
+    constructor() {
+        this.schedule = JSON.parse(localStorage.getItem('classSchedule')) || [];
+        this.canvas = document.getElementById('scheduleCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.colors = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', 
+            '#96CEB4', '#FFEEAD', '#D4A5A5'
+        ];
+        
+        this.initializeEvents();
+        this.render();
+    }
+
+    initializeEvents() {
+        // Form submission
+        document.getElementById('scheduleForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.addScheduleEntry();
+        });
+
+        // Canvas resize
+        window.addEventListener('resize', () => this.resizeCanvas());
+        this.resizeCanvas();
+    }
+
+    addScheduleEntry() {
+        const entry = {
+            id: Date.now(),
+            day: document.getElementById('daySelect').value,
+            subject: document.getElementById('subjectInput').value,
+            startTime: document.getElementById('startTime').value,
+            endTime: document.getElementById('endTime').value
+        };
+
+        this.schedule.push(entry);
+        this.saveSchedule();
+        this.render();
+        document.getElementById('scheduleForm').reset();
+    }
+
+    deleteEntry(id) {
+        this.schedule = this.schedule.filter(entry => entry.id !== id);
+        this.saveSchedule();
+        this.render();
+    }
+
+    saveSchedule() {
+        localStorage.setItem('classSchedule', JSON.stringify(this.schedule));
+    }
+
+    resizeCanvas() {
+        this.canvas.width = this.canvas.parentElement.offsetWidth;
+        this.canvas.height = 400;
+        this.render();
+    }
+
+    render() {
+        // Clear canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw timetable grid
+        this.drawGrid();
+        this.drawSchedule();
+        this.updateTable();
+    }
+
+    drawGrid() {
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const hours = ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+        
+        this.ctx.font = '12px Inter';
+        this.ctx.fillStyle = '#666';
+        
+        // Draw time labels
+        const timeWidth = 50;
+        const dayHeight = 30;
+        const cellWidth = (this.canvas.width - timeWidth) / 5;
+        const cellHeight = (this.canvas.height - dayHeight) / 6;
+
+        // Draw horizontal lines and time labels
+        hours.forEach((hour, i) => {
+            const y = dayHeight + i * cellHeight;
+            this.ctx.fillText(hour, 5, y + 15);
+            this.ctx.beginPath();
+            this.ctx.moveTo(timeWidth, y);
+            this.ctx.lineTo(this.canvas.width, y);
+            this.ctx.strokeStyle = '#eee';
+            this.ctx.stroke();
+        });
+
+        // Draw vertical lines and day labels
+        days.forEach((day, i) => {
+            const x = timeWidth + i * cellWidth;
+            this.ctx.fillText(day, x + 5, 20);
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, dayHeight);
+            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.strokeStyle = '#eee';
+            this.ctx.stroke();
+        });
+    }
+
+    drawSchedule() {
+        const timeWidth = 50;
+        const dayHeight = 30;
+        const cellWidth = (this.canvas.width - timeWidth) / 5;
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+        this.schedule.forEach((entry, index) => {
+            const dayIndex = days.indexOf(entry.day);
+            const [startHour, startMinute] = entry.startTime.split(':').map(Number);
+            const [endHour, endMinute] = entry.endTime.split(':').map(Number);
+
+            const x = timeWidth + dayIndex * cellWidth;
+            const y = dayHeight + ((startHour - 8) + startMinute/60) * ((this.canvas.height - dayHeight) / 10);
+            const height = ((endHour - startHour) + (endMinute - startMinute)/60) * ((this.canvas.height - dayHeight) / 10);
+
+            // Draw class block
+            this.ctx.fillStyle = this.colors[index % this.colors.length];
+            this.ctx.globalAlpha = 0.7;
+            this.ctx.fillRect(x + 2, y, cellWidth - 4, height);
+            this.ctx.globalAlpha = 1;
+
+            // Draw subject text
+            this.ctx.fillStyle = '#000';
+            this.ctx.font = '12px Inter';
+            this.ctx.fillText(entry.subject, x + 5, y + 15);
+        });
+    }
+
+    updateTable() {
+        const tbody = document.querySelector('#scheduleTable tbody');
+        tbody.innerHTML = this.schedule.map(entry => `
+            <tr>
+                <td>${entry.day}</td>
+                <td>${entry.subject}</td>
+                <td>${entry.startTime}</td>
+                <td>${entry.endTime}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="scheduleManager.deleteEntry(${entry.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+
+// Initialize schedule manager
+const scheduleManager = new ScheduleManager();
+
+// Add after existing dashboard code
+
+// Weekly Progress Chart
+function initWeeklyProgress() {
+    const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+    const data = getWeeklyData(); // Implement this function based on your data structure
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+            datasets: [{
+                label: 'Attendance',
+                data: data,
+                borderColor: getComputedStyle(document.body).getPropertyValue('--primary'),
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+}
+
+// Attendance Streak
+function updateStreak() {
+    const streak = calculateStreak(); // Implement based on your data
+    const streakElement = document.getElementById('streakCount');
+    streakElement.textContent = streak;
+    
+    if (streak > 5) {
+        streakElement.classList.add('text-success');
+    }
+}
+
+// Export Attendance Report
+function exportAttendance() {
+    const data = getAllAttendanceData(); // Implement based on your data
+    const csv = convertToCSV(data);
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'attendance_report.csv';
+    a.click();
+}
+
+// Show Statistics Modal
+function showStats() {
+    // Implement statistics calculation and display
+    const stats = calculateStats(); // Implement based on your data
+    
+    // Create and show modal with statistics
+    const modal = new bootstrap.Modal(document.getElementById('statsModal'));
+    document.getElementById('statsContent').innerHTML = `
+        <div class="row">
+            <div class="col-6">
+                <h6>Average Attendance</h6>
+                <p class="h4">${stats.average}%</p>
+            </div>
+            <div class="col-6">
+                <h6>Best Subject</h6>
+                <p class="h4">${stats.bestSubject}</p>
+            </div>
+        </div>
+    `;
+    modal.show();
+}
+
+// Initialize new features
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing initialization code...
+    initWeeklyProgress();
+    updateStreak();
 });
