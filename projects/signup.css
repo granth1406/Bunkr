@@ -1,0 +1,28 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    font-family: "lato", sans-serif;
+
+}
+
+.signup-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form {
+    background-color: white;
+    width: 400px;
+    border-radius: 8px;
+    padding: 20px 40px;
+    box-shadow: 0 10px 25px rgba(36, 38, 39, 0.2);
+}
+
+.title {
+    font-size: 50px;
+    margin-bottom: 50px;
+}
