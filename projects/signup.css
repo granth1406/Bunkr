@@ -1,28 +1,22 @@
-body {
-    box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+* {
     margin: 0;
     padding: 0;
-    background-color: white;
-    font-family: "lato", sans-serif;
-
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.signup-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+html,
+body {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    place-items: center;
+    background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
 }
 
-.form {
-    background-color: white;
-    width: 400px;
-    border-radius: 8px;
-    padding: 20px 40px;
-    box-shadow: 0 10px 25px rgba(36, 38, 39, 0.2);
-}
-
-.title {
-    font-size: 50px;
-    margin-bottom: 50px;
+::selection {
+    background: #1a75ff;
+    color: #fff;
 }

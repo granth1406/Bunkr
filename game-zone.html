@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen-Paint</title>
+    <style>
+        *{
+            margin: 0; 
+            padding: 0;
+            border: 0;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+        }
+        html, body{
+            height: 100%;
+            background-color: rgb(185, 209, 221);
+        }
+        .root{
+            display: grid;
+            align-items: center;
+            gap: 10px;
+            grid-template-columns: .8fr 2fr;
+            margin: 10px;
+            height: 100%;
+        }
+        #clr{
+            background-color: rgb(237, 211, 60);
+            border: 3px black solid;
+            border-radius: 30px;
+            height: 90%;
+
+            
+        }
+        #paint-screen{
+            background-color: white;
+            border: 3px black solid;
+            height: 90%;
+            border-radius: 30px;
+        }
+        #btn-div{
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            margin: 10px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        button{
+            margin: 3px;
+            padding: 4px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            width: 70%;
+            font-weight: 500;
+            font-size: large;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            background-color: rgb(46, 46, 230);
+            font-size: larger;
+            font-weight: bolder;
+        }
+
+        #popup{
+            position: fixed;
+            inset: 0;
+            background-color: rgb(0,0,0,0.3);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+
+        }
+
+        .modal{
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 0 15px rgba(0,0,0,0.25);
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .modal input{
+            padding :8px;
+            margin: 10px 0;
+            width: 80%;
+        }
+
+        .modal button{
+            margin: 5px;
+            padding: 6px 12px; 
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="root">
+        <div id="clr">
+            <div id="btn-div">
+                <button data-color="red">red</button>
+                <button data-color="blue">blue</button>
+                <button data-color="green">green</button>
+                <button id="add-btn">+</button>
+            </div>
+        </div>
+        <div id="paint-screen"></div>    
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <div id="popup">
+        <div class="modal">
+            <h2>Add a color</h2>
+            <input type="text" placeholder="Enter color" id="color-input">
+            <br>
+            <button onclick="submitColor()">Add</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        const paintScreen = document.getElementById("paint-screen")
+        document.querySelectorAll("button[data-color]").forEach(button => {
+            button.addEventListener("click", () => {
+                const color = button.getAttribute("data-color")
+                paintScreen.style.backgroundColor = color;
+            })
+        })
+        document.getElementById("add-btn").addEventListener("click", () => {
+
+        })
+
+        const popup = document.getElementById('popup')
+        const input = document.getElementById('color-input')
+
+        document.getElementById("add-btn").addEventListener("click", () => {
+            popup.style.display = 'flex';
+        })
+
+        function closeModal() {
+            popup.style.display = 'none';
+            input.value = '';
+
+        }
+
+        function submitColor() {
+            const color = input.value
+            if ( color ) {
+                paintScreen.style.backgroundColor = color;
+                closeModal()
+            }
+        }
+
+        popup.addEventListener("click" , (e) => {
+            if (e.target == popup) closeModal();
+        })
+    </script>
+</body>
+</html>

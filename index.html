@@ -9,154 +9,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="background3d.js" type="module"></script>
 
-  <!-- Custom Styles -->
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f0f2f5;
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-    .card {
-      animation: zoomIn 0.6s ease-in-out both;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-      border: none;
-    }
-    @keyframes zoomIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .hover-scale:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease-in-out;
-    }
-    .dark-mode {
-      background-color: #121212;
-      color: #ffffff;
-    }
-    .dark-mode .card {
-      background-color: #1f1f1f;
-      color: #ffffff;
-    }
-    .neon-mode {
-      background-color: #050505;
-      color: #00ffff;
-    }
-    .neon-mode .card {
-      background-color: #111;
-      color: #00ffff;
-      box-shadow: 0 0 20px #00ffff;
-    }
-    .progress-bar {
-      transition: width 0.6s ease;
-    }
-    .bounce {
-      animation: bounce 1.5s infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .glow { box-shadow: 0 0 12px #00ffff; }
-    .theme-switch {
-      display: flex;
-      gap: 10px;
-    }
-    .theme-switch button {
-      border-radius: 50px;
-      font-weight: 600;
-    }
-    table.table td {
-      vertical-align: middle;
-    }
-    h3 {
-      font-weight: 600;
-      border-left: 5px solid #0d6efd;
-      padding-left: 10px;
-    }
-    .navbar-brand { font-size: 1.5rem; }
-    .navbar-nav .nav-link {
-      font-weight: 500;
-      cursor: pointer;
-    }
-    input.form-control {
-      border-radius: 10px;
-      box-shadow: none;
-    }
-    button.btn {
-      border-radius: 12px;
-    }
-    .section { display: none; }
-    .section.active { display: block; }
-
-    @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  .fade-in {
-  animation: fadeIn 0.6s ease;
-  }
-
-  .navbar {
-    border-radius: 20px;
-    margin: 20px;
-    padding: 15px 30px;
-    background: rgba(255, 255, 255, 0.8); /* Glass effect */
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    transition: all 0.4s ease;
-  }
-  .navbar-brand {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #0d6efd;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 5px rgba(13, 110, 253, 0.3);
-  }
-  .navbar-light .navbar-nav .nav-link {
-    margin: 0 10px;
-    padding: 8px 18px;
-    border-radius: 12px;
-    font-weight: 500;
-    color: #333;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .navbar-light .navbar-nav .nav-link:hover, 
-  .navbar-light .navbar-nav .nav-link.active {
-    background: linear-gradient(135deg, #0d6efd, #4be0ed);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
-    transform: translateY(-2px);
-  }
-  .theme-switch .btn {
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    font-size: 1.2rem;
-    background: #fff;
-    color: #0d6efd;
-    border: 2px solid #0d6efd;
-    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
-    transition: all 0.3s ease;
-  }
-  .theme-switch .btn:hover {
-    background: #0d6efd;
-    color: #fff;
-    transform: scale(1.1);
-  }
-  .navbar-toggler {
-    border: none;
-    outline: none;
-  }
-  .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 30 30'%3e%3cpath stroke='%230d6efd' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-  }
-
-  </style>
+  <!-- CSS File -->
+   <link rel="stylesheet" href="index.css">
+  
 </head>
 
 <body>
@@ -176,6 +34,7 @@
       <li class="nav-item"><a class="nav-link" data-target="schedule">Schedule</a></li>
       <li class="nav-item"><a class="nav-link" data-target="graph">Graph</a></li>
       <li class="nav-item"><a class="nav-link" data-target="about">AboutUs</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="game-zone">Game Zone</a></li>
     </ul>
     <div class="theme-switch ms-3">
       <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
@@ -196,6 +55,48 @@
     </div>
     <div class="col-md-4">
       <div class="card p-4 text-center"><h5>Upcoming Class</h5><p>2:00 PM - OS</p></div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <!-- Weekly Progress Card -->
+    <div class="col-md-6">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <h5 class="card-title">Weekly Progress</h5>
+          <canvas id="weeklyProgressChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Streak Card -->
+    <div class="col-md-3">
+      <div class="card dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title">Current Streak</h5>
+          <div class="streak-display">
+            <h2 id="streakCount">0</h2>
+            <p>Days</p>
+            <div class="streak-flame"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="col-md-3">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <h5 class="card-title">Quick Actions</h5>
+          <div class="quick-actions d-grid gap-2">
+            <button class="btn btn-primary" onclick="exportAttendance()">
+              📊 Export Report
+            </button>
+            <button class="btn btn-info" onclick="showStats()">
+              📈 View Analytics
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -267,21 +168,64 @@
   <div id="alertContainer"></div>
 </div>
 
-<!-- Schedule -->
+<!-- Schedule Section -->
 <div class="container my-5 section" id="schedule">
-  <h3 class="mb-4">Class Schedule</h3>
-  <table class="table table-bordered text-center">
-    <thead>
-      <tr><th>Day</th><th>9-10</th><th>10-11</th><th>11-12</th><th>12-1</th><th>2-3</th><th>3-4</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Mon</td><td>OS</td><td colspan="2">DE&T</td><td>DECA</td><td colspan="2">CP Lab</td></tr>
-      <tr><td>Tue</td><td>DE&T</td><td colspan="2"></td><td>DECA</td><td colspan="2">CP</td></tr>
-      <tr><td>Wed</td><td colspan="2">CP Lab</td><td>--</td><td>SCM Lab</td><td colspan="2">--</td></tr>
-      <tr><td>Thu</td><td>DECA</td><td>DE&T</td><td>OS</td><td>--</td><td colspan="2">SCM Lab</td></tr>
-      <tr><td>Fri</td><td>--</td><td>DE&T</td><td>CP</td><td>--</td><td colspan="2">DECA Lab</td></tr>
-    </tbody>
-  </table>
+    <h3 class="mb-4">Class Schedule</h3>
+    
+    <!-- Schedule Form -->
+    <form id="scheduleForm">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <select class="form-select" id="daySelect" required>
+                    <option value="">Select Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="subjectInput" placeholder="Subject" required>
+            </div>
+            <div class="col-md-2">
+                <input type="time" class="form-control" id="startTime" required>
+            </div>
+            <div class="col-md-2">
+                <input type="time" class="form-control" id="endTime" required>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Add Class</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Schedule Canvas -->
+    <div class="card">
+        <div class="card-body">
+            <canvas id="scheduleCanvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Schedule Table -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Subject</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Graph -->
@@ -313,230 +257,52 @@
   <p><em>Join thousands of students who trust ßunkr to keep them on track. Your academic success, simplified!</em></p>
 </div>
 
-<!-- JavaScript -->
-<script>
-  let attendanceData = [];
+<!-- Game Zone -->
+<div class="container my-5 section" id="game-zone">
 
-  const chartCtx = document.getElementById('attendanceChart').getContext('2d');
-  let attendanceChart = new Chart(chartCtx, {
-    type: 'bar',
-    data: {
-      labels: [],
-      datasets: [{
-        label: 'Attendance %',
-        backgroundColor: '#0d6efd',
-        borderColor: '#0d6efd',
-        borderWidth: 1,
-        data: []
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false }, tooltip: { enabled: true }},
-      scales: { y: { beginAtZero: true, max: 100 }}
-    }
-  });
+  <h3 class="mb-4">Screen Paint</h3>
 
-  function saveToLocalStorage() {
-    localStorage.setItem('attendance', JSON.stringify(attendanceData));
-  }
+  <div class="screen-paint">
+    <div class="root">
+      <div id="clr">
+        <div id="btn-div">
+  <div class="screen-paint">
+    <div class="root">
+      <div id="clr">
+        <div id="btn-div">
+          <button data-color="red">red</button>
+          <button data-color="blue">blue</button>
+          <button data-color="green">green</button>
+        </div>
+      </div>
+      <div id="paint-screen"></div>    
+    </div>
 
-  function syncAttendance() {
-    const total = parseInt(document.getElementById("totalClasses").value);
-    const attended = parseInt(document.getElementById("attendedClasses").value);
-    const subject = document.getElementById("subject").value;
-    if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
-      const percentage = Math.min(Math.round((attended / total) * 100), 100);
-      const entryIndex = attendanceData.findIndex(item => item.subject === subject);
-      if(entryIndex >= 0) attendanceData[entryIndex] = { subject, total, attended, percentage };
-      else attendanceData.push({ subject, total, attended, percentage });
-
-      document.getElementById("progressBar").style.width = percentage + "%";
-      document.getElementById("progressBar").innerText = percentage + "%";
-      document.getElementById("totalPercentage").innerText = percentage + "%";
-
-      let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
-      document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
-
-      const labelIndex = attendanceChart.data.labels.indexOf(subject);
-      if (labelIndex >= 0) {
-        attendanceChart.data.datasets[0].data[labelIndex] = percentage;
-      } else {
-        attendanceChart.data.labels.push(subject);
-        attendanceChart.data.datasets[0].data.push(percentage);
-      }
-      attendanceChart.update();
-      updateRemoveDropdown();
-      saveToLocalStorage();
-      showAlerts();
-    }
-  }
-
-  function removeSubject() {
-    const selected = document.getElementById("removeSubjectDropdown").value;
-    if (!selected) return;
-    attendanceData = attendanceData.filter(item => item.subject !== selected);
-    const idx = attendanceChart.data.labels.indexOf(selected);
-    if (idx !== -1) {
-      attendanceChart.data.labels.splice(idx, 1);
-      attendanceChart.data.datasets[0].data.splice(idx, 1);
-      attendanceChart.update();
-      updateRemoveDropdown();
-      saveToLocalStorage();
-      showAlerts();
-    }
-  }
-
-  function updateRemoveDropdown() {
-    const dropdown = document.getElementById("removeSubjectDropdown");
-    dropdown.innerHTML = "";
-    attendanceData.forEach(item => {
-      let opt = document.createElement("option");
-      opt.value = opt.innerText = item.subject;
-      dropdown.appendChild(opt);
-    });
-  }
-
-  function setTheme(theme) {
-    localStorage.setItem('theme', theme);
-    document.body.classList.remove('dark-mode', 'neon-mode');
-    if (theme === 'dark') document.body.classList.add('dark-mode');
-    else if (theme === 'neon') document.body.classList.add('neon-mode');
-  }
-
-  function showAlerts() {
-    const alertsOn = document.getElementById("toggleAlerts").checked;
-    const alertContainer = document.getElementById("alertContainer");
-    alertContainer.innerHTML = "";
-    if (!alertsOn) return;
-    attendanceData.forEach(item => {
-      if (item.percentage < 75) {
-        const div = document.createElement("div");
-        div.className = "card p-3 mb-3";
-        div.innerHTML = `<h5>⚠️ Low Attendance in ${item.subject}</h5>
-          <p>You're at ${item.percentage}%. Attend more classes to stay above 75%.</p>`;
-        alertContainer.appendChild(div);
-      }
-    });
-  }
-
-  window.onload = () => {
-    const theme = localStorage.getItem('theme') || 'light';
-    setTheme(theme);
-    const saved = localStorage.getItem("attendance");
-    if (saved) {
-      attendanceData = JSON.parse(saved);
-      attendanceData.forEach(item => {
-        attendanceChart.data.labels.push(item.subject);
-        attendanceChart.data.datasets[0].data.push(item.percentage);
-      });
-      attendanceChart.update();
-      updateRemoveDropdown();
-
-      // Update Dashboard with the last entered subject
-      const last = attendanceData[attendanceData.length - 1];
-      document.getElementById("totalPercentage").innerText = last.percentage + "%";
-      let safeBunks = Math.floor(((last.attended - (0.75 * last.total)) / 0.25));
-      document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
-    }
-    showAlerts();
-  };
-
-  // Bunk Calculator Logic
-  document.getElementById('calcBunk').addEventListener('click', () => {
-    const requiredPercent = parseFloat(document.getElementById('requiredPercent').value) / 100;
-    const totalSemClasses = parseInt(document.getElementById('totalSemClasses').value);
-    const classesSoFar = parseInt(document.getElementById('classesSoFar').value);
-    const attendedSoFar = parseInt(document.getElementById('attendedSoFar').value);
-    
-    if (isNaN(requiredPercent)) {
-      alert('Please enter required attendance percentage!');
-      return;
-    }
-    
-    if (isNaN(totalSemClasses) || isNaN(classesSoFar) || isNaN(attendedSoFar)) {
-      alert('Please enter valid numbers for all fields!');
-      return;
-    }
-    
-    if (classesSoFar > totalSemClasses) {
-      alert('Classes conducted so far cannot be greater than total semester classes!');
-      return;
-    }
-    
-    if (attendedSoFar > classesSoFar) {
-      alert('Attended classes cannot be greater than classes conducted!');
-      return;
-    }
-    
-    // Calculate current attendance percentage
-    const currentPercent = (attendedSoFar / classesSoFar) * 100;
-    
-    // Calculate remaining classes
-    const remainingClasses = totalSemClasses - classesSoFar;
-    
-    // Calculate minimum classes needed to attend to meet requirement
-    const totalRequired = Math.ceil(totalSemClasses * requiredPercent);
-    const stillNeed = Math.max(0, totalRequired - attendedSoFar);
-    
-    // Calculate maximum bunkable classes
-    let bunkable = 0;
-    if (stillNeed <= remainingClasses) {
-      bunkable = remainingClasses - stillNeed;
-    }
-    
-    // Calculate final attendance percentage if all bunkable classes are bunked
-    const finalAttended = attendedSoFar + stillNeed;
-    const finalPercent = (finalAttended / totalSemClasses) * 100;
-    
-    // Calculate safe bunk limit (75% attendance)
-    const safeBunkLimit = Math.floor(((attendedSoFar - (0.75 * classesSoFar)) / 0.25));
-    
-    // Display results
-    document.getElementById('currentPercent').textContent = currentPercent.toFixed(1);
-    document.getElementById('bunkNum').textContent = bunkable;
-    document.getElementById('safeBunkLimit').textContent = safeBunkLimit > 0 ? safeBunkLimit : 0;
-    document.getElementById('finalPercent').textContent = finalPercent.toFixed(1);
-    
-    // Update progress bar
-    const progressBar = document.getElementById('bunkProgressBar');
-    progressBar.style.width = currentPercent + '%';
-    progressBar.textContent = currentPercent.toFixed(1) + '%';
-    
-    // Color progress bar based on attendance
-    if (currentPercent >= 75) {
-      progressBar.classList.remove('bg-warning', 'bg-danger');
-      progressBar.classList.add('bg-success');
-    } else if (currentPercent >= 50) {
-      progressBar.classList.remove('bg-success', 'bg-danger');
-      progressBar.classList.add('bg-warning');
-    } else {
-      progressBar.classList.remove('bg-success', 'bg-warning');
-      progressBar.classList.add('bg-danger');
-    }
-    
-    // Show results card
-    document.getElementById('bunkResult').style.display = 'block';
-  });
-
-  const sections = document.querySelectorAll('.section');
-  const links = document.querySelectorAll('.navbar-nav .nav-link');
-
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      const target = link.getAttribute('data-target');
-      sections.forEach(section => {
-        section.classList.remove('active', 'fade-in');
-        if (section.id === target) {
-          section.classList.add('active', 'fade-in');
-        }
-      });
-    });
-  });
-
+    <div id="popup">
+      <div class="modal">
+        <h2>Add a color</h2>
+        <input type="text" placeholder="Enter color" id="color-input">
+        <br>
+        <button onclick="submitColor()">Add</button>
+        <button onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <h3 class="mb-4">Pokemon Search</h3>
+  <div class="app-container" style="height: 500px;">
+    <iframe src="https://pokemoninformation.vercel.app/" width="100%" height="500px" style="border:none;"></iframe>
+  </div>
+  <br>
+  <br>
+  <h3 class="mb-4">Quiz Time</h3>
   
+</div>
 
-</script>
+
+<!-- JavaScript -->
+<script src="index.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

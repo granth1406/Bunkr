@@ -1,0 +1,16 @@
+name: Welcome New Contributors
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send greeting message for new contributor
+        if: github.event.pull_request.user.login != 'github-actions[bot]'  # Prevents greeting GitHub actions bot.
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"body":"Thanks for adding something and improving us! 🙌 We appreciate your contribution!"}' \
+          https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
