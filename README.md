@@ -16,13 +16,13 @@ It is useful in calculating and tracking your attendace , so you can bunk classe
 
 ## 📸 Screenshots
 
-![Dashboard Overview](./screenshots/dashboard.png)
+![image](https://github.com/user-attachments/assets/f9099fb7-3388-43a0-8fe7-26b27da7e511)
 *Dashboard displaying attendance metrics and upcoming classes.*
 
-![Bunk Calculator](./screenshots/bunk_calculator.png)
+![image](https://github.com/user-attachments/assets/d4662eb3-df7b-439a-a600-e85158b0aba2)
 *Tool to calculate safe bunk limits based on attendance data.*
 
-![Game Zone](./screenshots/game_zone.png)
+![image](https://github.com/user-attachments/assets/ab27ca8d-6e14-4dd0-89d8-05ab8aacb4bd)
 *Interactive mini-games for relaxation and engagement.*
 
 ---
