@@ -29,6 +29,9 @@ class About3D {
         ];
         
         this.cards = [];
+        this.textures = new Set();
+        this.materials = new Set();
+        this.geometries = new Set();
         this.init();
 
         // Increase camera distance for better view
@@ -98,14 +101,18 @@ class About3D {
         this.developers.forEach((dev, i) => {
             // Create card geometry
             const geometry = new THREE.PlaneGeometry(5, 7);
+            this.geometries.add(geometry);
             
             // Create material with developer info
             const canvas = this.createCardCanvas(dev);
             const texture = new THREE.CanvasTexture(canvas);
+            this.textures.add(texture);
+            
             const material = new THREE.MeshPhongMaterial({ 
                 map: texture,
                 transparent: true
             });
+            this.materials.add(material);
 
             // Create card mesh
             const card = new THREE.Mesh(geometry, material);
@@ -168,7 +175,7 @@ class About3D {
     }
 
     animate() {
-        requestAnimationFrame(() => this.animate());
+        this.animationFrameId = requestAnimationFrame(() => this.animate());
         
         // Rotate cards slightly
         this.cards.forEach(card => {
@@ -176,6 +183,60 @@ class About3D {
         });
 
         this.renderer.render(this.scene, this.camera);
+    }
+
+    // Add cleanup method
+    cleanup() {
+        // Stop animation loop
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+        }
+
+        // Remove event listeners
+        window.removeEventListener('resize', this.onWindowResize.bind(this));
+        this.renderer.domElement.removeEventListener('mousemove', this.onMouseMove.bind(this));
+
+        // Dispose of geometries
+        this.geometries.forEach(geometry => {
+            geometry.dispose();
+        });
+
+        // Dispose of materials
+        this.materials.forEach(material => {
+            if (material.map) {
+                material.map.dispose();
+            }
+            material.dispose();
+        });
+
+        // Dispose of textures
+        this.textures.forEach(texture => {
+            texture.dispose();
+        });
+
+        // Clear scene
+        while(this.scene.children.length > 0) { 
+            const object = this.scene.children[0];
+            this.scene.remove(object);
+        }
+
+        // Dispose of renderer if it exists
+        if (this.renderer) {
+            this.renderer.dispose();
+            const canvas = this.renderer.domElement;
+            if (canvas && canvas.parentNode) {
+                canvas.parentNode.removeChild(canvas);
+            }
+        }
+
+        // Clear references
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.cards = [];
+        this.geometries.clear();
+        this.materials.clear();
+        this.textures.clear();
     }
 }
 

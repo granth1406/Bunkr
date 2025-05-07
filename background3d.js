@@ -20,6 +20,12 @@ class ParticleBackground {
             dark: new THREE.Color(0x45B7D1),
             neon: new THREE.Color(0x00ff00)
         };
+
+        this.geometries = new Set();
+        this.materials = new Set();
+        this.lineMaterials = new Set();
+        this.lineGeometries = new Set();
+        this.isDestroyed = false;
         
         this.init();
     }
@@ -50,6 +56,7 @@ class ParticleBackground {
 
     createParticles() {
         const particleGeometry = new THREE.BufferGeometry();
+        this.geometries.add(particleGeometry);
         const positions = new Float32Array(this.particleCount * 3);
         const velocities = [];
 
@@ -73,6 +80,7 @@ class ParticleBackground {
             transparent: true,
             opacity: 0.8
         });
+        this.materials.add(particleMaterial);
 
         this.particles = new THREE.Points(particleGeometry, particleMaterial);
         this.scene.add(this.particles);
@@ -80,11 +88,23 @@ class ParticleBackground {
     }
 
     updateParticles() {
+        if (this.isDestroyed) return;
+
         const positions = this.particles.geometry.attributes.position.array;
         const maxDistance = 10;
 
-        // Remove old lines
-        this.links.forEach(line => this.scene.remove(line));
+        // Clear old lines and their resources
+        this.links.forEach(line => {
+            this.scene.remove(line);
+            if (line.geometry) {
+                this.lineGeometries.delete(line.geometry);
+                line.geometry.dispose();
+            }
+            if (line.material) {
+                this.lineMaterials.delete(line.material);
+                line.material.dispose();
+            }
+        });
         this.links = [];
 
         // Update particle positions
@@ -118,11 +138,15 @@ class ParticleBackground {
 
                 if (distance < maxDistance) {
                     const lineGeometry = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+                    this.lineGeometries.add(lineGeometry);
+                    
                     const lineMaterial = new THREE.LineBasicMaterial({ 
                         color: this.particles.material.color,
                         transparent: true,
                         opacity: (1 - distance / maxDistance) * 0.4
                     });
+                    this.lineMaterials.add(lineMaterial);
+                    
                     const line = new THREE.Line(lineGeometry, lineMaterial);
                     this.scene.add(line);
                     this.links.push(line);
@@ -153,8 +177,71 @@ class ParticleBackground {
         this.links.forEach(link => link.material.color = color);
     }
 
+    cleanup() {
+        this.isDestroyed = true;
+
+        // Stop animation loop
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+
+        // Remove event listeners
+        window.removeEventListener('resize', this.onWindowResize.bind(this));
+        window.removeEventListener('mousemove', this.onMouseMove.bind(this));
+
+        // Dispose of particle resources
+        if (this.particles) {
+            if (this.particles.geometry) {
+                this.particles.geometry.dispose();
+            }
+            if (this.particles.material) {
+                this.particles.material.dispose();
+            }
+        }
+
+        // Dispose of line resources
+        this.lineGeometries.forEach(geometry => {
+            geometry.dispose();
+        });
+        this.lineMaterials.forEach(material => {
+            material.dispose();
+        });
+
+        // Clear arrays and sets
+        this.links = [];
+        this.velocities = [];
+        this.geometries.clear();
+        this.materials.clear();
+        this.lineGeometries.clear();
+        this.lineMaterials.clear();
+
+        // Clear scene
+        while(this.scene.children.length > 0) { 
+            const object = this.scene.children[0];
+            this.scene.remove(object);
+        }
+
+        // Dispose of renderer
+        if (this.renderer) {
+            this.renderer.dispose();
+            const canvas = this.renderer.domElement;
+            if (canvas && canvas.parentNode) {
+                canvas.parentNode.removeChild(canvas);
+            }
+        }
+
+        // Clear references
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.particles = null;
+    }
+
     animate() {
-        requestAnimationFrame(() => this.animate());
+        if (this.isDestroyed) return;
+        
+        this.animationFrameId = requestAnimationFrame(() => this.animate());
         this.updateParticles();
         this.renderer.render(this.scene, this.camera);
     }
