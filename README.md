@@ -1,12 +1,9 @@
-Here is the updated and cleaned-up version of your README.md, now including the required sections: Project Description, Installation & Usage Instructions, Contributors List, and License Info.
-
-````markdown
 # 🎓 Bunkr – Smart Attendance & Bunk Planner
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/granth1406/Bunkr)
 ![GitHub contributors](https://img.shields.io/github/contributors/granth1406/Bunkr)
 ![GitHub last commit](https://img.shields.io/github/last-commit/granth1406/Bunkr)
-![Website](https://img.shields.io/website?down_color=red&down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fscm-project-delta.vercel.app)
+![Website](https://img.shields.io/website?down_color=red\&down_message=offline\&up_color=green\&up_message=online\&url=https%3A%2F%2Fscm-project-delta.vercel.app)
 
 🔗 Live Demo: [scm-project-delta.vercel.app](https://scm-project-delta.vercel.app/)
 
@@ -21,10 +18,10 @@ Bunkr is a web-based tool designed for students to monitor, calculate, and plan 
 ## 💻 Installation & Usage Instructions
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/granth1406/Bunkr.git
-````
-
+   ```
 2. Open the project folder:
 
    ```bash
@@ -89,7 +86,7 @@ See the [LICENSE](./LICENSE) file for full license text.
 
 ---
 
-Feel free to ⭐ star the repo, fork it, and contribute!
+⭐ Star the repo, fork it, and feel free to contribute!
 
-
+---
 
