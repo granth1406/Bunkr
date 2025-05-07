@@ -165,7 +165,6 @@ transform: translateX(-50%);
 width: 100%;
 }
 
-/* Theme-specific navbar styles */
 .dark-mode .navbar {
 background: rgba(20, 20, 20, 0.8) !important;
 }
@@ -282,7 +281,6 @@ box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     cursor: pointer;
 }
 
-/* About Section Styles */
 .about-wrapper {
     max-width: 1400px;
     margin: 0 auto;
@@ -329,12 +327,10 @@ box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     line-height: 1.6;
 }
 
-/* Dark Mode Adjustments */
 .dark-mode .team-card {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Neon Mode Adjustments */
 .neon-mode .team-card {
     border-color: var(--primary-color);
     box-shadow: 0 0 20px var(--primary-color);

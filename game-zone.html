@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Screen-Paint</title>
     <style>
         *{
@@ -10,7 +10,6 @@
             padding: 0;
             border: 0;
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-
         }
         html, body{
             height: 100%;
@@ -29,8 +28,6 @@
             border: 3px black solid;
             border-radius: 30px;
             height: 90%;
-
-            
         }
         #paint-screen{
             background-color: white;
@@ -62,7 +59,6 @@
             font-size: larger;
             font-weight: bolder;
         }
-
         #popup{
             position: fixed;
             inset: 0;
@@ -72,9 +68,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999;
-
         }
-
         .modal{
             background: white;
             padding: 20px;
@@ -83,20 +77,16 @@
             min-width: 250px;
             text-align: center;
         }
-
         .modal input{
             padding :8px;
             margin: 10px 0;
             width: 80%;
         }
-
         .modal button{
             margin: 5px;
             padding: 6px 12px; 
             cursor: pointer;
         }
-
-
     </style>
 </head>
 <body>
@@ -111,18 +101,6 @@
         </div>
         <div id="paint-screen"></div>    
     </div>
-    
-
-
-
-
-
-
-
-
-
-
-
     <div id="popup">
         <div class="modal">
             <h2>Add a color</h2>
@@ -132,16 +110,6 @@
             <button onclick="closeModal()">Close</button>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
     <script>
         const paintScreen = document.getElementById("paint-screen")
         document.querySelectorAll("button[data-color]").forEach(button => {
@@ -150,9 +118,7 @@
                 paintScreen.style.backgroundColor = color;
             })
         })
-        document.getElementById("add-btn").addEventListener("click", () => {
-
-        })
+        document.getElementById("add-btn").addEventListener("click", () => {})
 
         const popup = document.getElementById('popup')
         const input = document.getElementById('color-input')
@@ -164,18 +130,17 @@
         function closeModal() {
             popup.style.display = 'none';
             input.value = '';
-
         }
 
         function submitColor() {
             const color = input.value
-            if ( color ) {
+            if (color) {
                 paintScreen.style.backgroundColor = color;
                 closeModal()
             }
         }
 
-        popup.addEventListener("click" , (e) => {
+        popup.addEventListener("click", (e) => {
             if (e.target == popup) closeModal();
         })
     </script>

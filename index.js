@@ -85,7 +85,6 @@ function setTheme(theme) {
   if (theme === 'dark') document.body.classList.add('dark-mode');
   else if (theme === 'neon') document.body.classList.add('neon-mode');
   
-  // Update background theme with proper cleanup
   import('./background3d.js').then(module => {
       if (window.currentBackground) {
           window.currentBackground.cleanup();
@@ -94,7 +93,6 @@ function setTheme(theme) {
       window.currentBackground.updateTheme(theme);
   });
   
-  // Save theme preference
   localStorage.setItem('theme', theme);
 }
 
@@ -127,7 +125,6 @@ window.onload = () => {
     attendanceChart.update();
     updateRemoveDropdown();
 
-    // Update Dashboard with the last entered subject
     const last = attendanceData[attendanceData.length - 1];
     document.getElementById("totalPercentage").innerText = last.percentage + "%";
     let safeBunks = Math.floor(((last.attended - (0.75 * last.total)) / 0.25));
@@ -136,7 +133,6 @@ window.onload = () => {
   showAlerts();
 };
 
-// Bunk Calculator Logic
 document.getElementById('calcBunk').addEventListener('click', () => {
   const requiredPercent = parseFloat(document.getElementById('requiredPercent').value) / 100;
   const totalSemClasses = parseInt(document.getElementById('totalSemClasses').value);
@@ -163,41 +159,32 @@ document.getElementById('calcBunk').addEventListener('click', () => {
     return;
   }
   
-  // Calculate current attendance percentage
   const currentPercent = (attendedSoFar / classesSoFar) * 100;
   
-  // Calculate remaining classes
   const remainingClasses = totalSemClasses - classesSoFar;
   
-  // Calculate minimum classes needed to attend to meet requirement
   const totalRequired = Math.ceil(totalSemClasses * requiredPercent);
   const stillNeed = Math.max(0, totalRequired - attendedSoFar);
   
-  // Calculate maximum bunkable classes
   let bunkable = 0;
   if (stillNeed <= remainingClasses) {
     bunkable = remainingClasses - stillNeed;
   }
   
-  // Calculate final attendance percentage if all bunkable classes are bunked
   const finalAttended = attendedSoFar + stillNeed;
   const finalPercent = (finalAttended / totalSemClasses) * 100;
   
-  // Calculate safe bunk limit (75% attendance)
   const safeBunkLimit = Math.floor(((attendedSoFar - (0.75 * classesSoFar)) / 0.25));
   
-  // Display results
   document.getElementById('currentPercent').textContent = currentPercent.toFixed(1);
   document.getElementById('bunkNum').textContent = bunkable;
   document.getElementById('safeBunkLimit').textContent = safeBunkLimit > 0 ? safeBunkLimit : 0;
   document.getElementById('finalPercent').textContent = finalPercent.toFixed(1);
   
-  // Update progress bar
   const progressBar = document.getElementById('bunkProgressBar');
   progressBar.style.width = currentPercent + '%';
   progressBar.textContent = currentPercent.toFixed(1) + '%';
   
-  // Color progress bar based on attendance
   if (currentPercent >= 75) {
     progressBar.classList.remove('bg-warning', 'bg-danger');
     progressBar.classList.add('bg-success');
@@ -209,7 +196,6 @@ document.getElementById('calcBunk').addEventListener('click', () => {
     progressBar.classList.add('bg-danger');
   }
   
-  // Show results card
   document.getElementById('bunkResult').style.display = 'block';
 });
 
@@ -224,7 +210,6 @@ links.forEach(link => {
       if (section.id === target) {
         section.classList.add('active', 'fade-in');
         
-        // Cleanup 3D effects when switching away from sections
         if (target !== 'about' && window.about3D) {
             window.about3D.cleanup();
             window.about3D = null;
@@ -235,12 +220,11 @@ links.forEach(link => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const screenPaint = document.querySelector('.screen-paint'); // Scoped to the paint game section
-    const paintScreen = screenPaint.querySelector("#paint-screen"); // Paint screen element within the game zone
+    const screenPaint = document.querySelector('.screen-paint');
+    const paintScreen = screenPaint.querySelector("#paint-screen");
     const popup = screenPaint.querySelector('#popup');
     const input = screenPaint.querySelector('#color-input');
     
-    // Color buttons functionality
     screenPaint.querySelectorAll("button[data-color]").forEach(button => {
         button.addEventListener("click", () => {
             const color = button.getAttribute("data-color");
@@ -248,18 +232,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Open the modal for custom color
     screenPaint.querySelector("#add-btn").addEventListener("click", () => {
         popup.style.display = 'flex';
     });
 
-    // Close the modal
     function closeModal() {
         popup.style.display = 'none';
         input.value = '';
     }
 
-    // Submit the color from the modal input
     function submitColor() {
         const color = input.value;
         if (color) {
@@ -268,12 +249,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Close modal if clicking outside
     popup.addEventListener("click", (e) => {
         if (e.target == popup) closeModal();
     });
 
-    // Event listener for modal buttons
     screenPaint.querySelector(".modal button:nth-child(1)").addEventListener("click", submitColor);
     screenPaint.querySelector(".modal button:nth-child(2)").addEventListener("click", closeModal);
 });
@@ -293,13 +272,11 @@ class ScheduleManager {
     }
 
     initializeEvents() {
-        // Form submission
         document.getElementById('scheduleForm').addEventListener('submit', (e) => {
             e.preventDefault();
             this.addScheduleEntry();
         });
 
-        // Canvas resize
         window.addEventListener('resize', () => this.resizeCanvas());
         this.resizeCanvas();
     }
@@ -336,10 +313,8 @@ class ScheduleManager {
     }
 
     render() {
-        // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw timetable grid
         this.drawGrid();
         this.drawSchedule();
         this.updateTable();
@@ -352,13 +327,11 @@ class ScheduleManager {
         this.ctx.font = '12px Inter';
         this.ctx.fillStyle = '#666';
         
-        // Draw time labels
         const timeWidth = 50;
         const dayHeight = 30;
         const cellWidth = (this.canvas.width - timeWidth) / 5;
         const cellHeight = (this.canvas.height - dayHeight) / 6;
 
-        // Draw horizontal lines and time labels
         hours.forEach((hour, i) => {
             const y = dayHeight + i * cellHeight;
             this.ctx.fillText(hour, 5, y + 15);
@@ -369,7 +342,6 @@ class ScheduleManager {
             this.ctx.stroke();
         });
 
-        // Draw vertical lines and day labels
         days.forEach((day, i) => {
             const x = timeWidth + i * cellWidth;
             this.ctx.fillText(day, x + 5, 20);
@@ -396,13 +368,11 @@ class ScheduleManager {
             const y = dayHeight + ((startHour - 8) + startMinute/60) * ((this.canvas.height - dayHeight) / 10);
             const height = ((endHour - startHour) + (endMinute - startMinute)/60) * ((this.canvas.height - dayHeight) / 10);
 
-            // Draw class block
             this.ctx.fillStyle = this.colors[index % this.colors.length];
             this.ctx.globalAlpha = 0.7;
             this.ctx.fillRect(x + 2, y, cellWidth - 4, height);
             this.ctx.globalAlpha = 1;
 
-            // Draw subject text
             this.ctx.fillStyle = '#000';
             this.ctx.font = '12px Inter';
             this.ctx.fillText(entry.subject, x + 5, y + 15);
@@ -427,15 +397,11 @@ class ScheduleManager {
     }
 }
 
-// Initialize schedule manager
 const scheduleManager = new ScheduleManager();
 
-// Add after existing dashboard code
-
-// Weekly Progress Chart
 function initWeeklyProgress() {
     const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
-    const data = getWeeklyData(); // Implement this function based on your data structure
+    const data = getWeeklyData();
 
     new Chart(ctx, {
         type: 'line',
@@ -467,9 +433,8 @@ function initWeeklyProgress() {
     });
 }
 
-// Attendance Streak
 function updateStreak() {
-    const streak = calculateStreak(); // Implement based on your data
+    const streak = calculateStreak();
     const streakElement = document.getElementById('streakCount');
     streakElement.textContent = streak;
     
@@ -478,9 +443,8 @@ function updateStreak() {
     }
 }
 
-// Export Attendance Report
 function exportAttendance() {
-    const data = getAllAttendanceData(); // Implement based on your data
+    const data = getAllAttendanceData();
     const csv = convertToCSV(data);
     
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -491,12 +455,9 @@ function exportAttendance() {
     a.click();
 }
 
-// Show Statistics Modal
 function showStats() {
-    // Implement statistics calculation and display
-    const stats = calculateStats(); // Implement based on your data
+    const stats = calculateStats();
     
-    // Create and show modal with statistics
     const modal = new bootstrap.Modal(document.getElementById('statsModal'));
     document.getElementById('statsContent').innerHTML = `
         <div class="row">
@@ -513,9 +474,7 @@ function showStats() {
     modal.show();
 }
 
-// Initialize new features
 document.addEventListener('DOMContentLoaded', () => {
-    // ...existing initialization code...
     initWeeklyProgress();
     updateStreak();
     import('./background3d.js').then(module => {
@@ -523,7 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add window cleanup
 window.addEventListener('beforeunload', () => {
     if (window.about3D) {
         window.about3D.cleanup();

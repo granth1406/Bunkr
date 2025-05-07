@@ -4,25 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ßunkr</title>
-
-  <!-- Bootstrap & Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="background3d.js" type="module"></script>
   <script src="about3D.js" type="module"></script>
-
-  <!-- CSS File -->
-   <link rel="stylesheet" href="index.css">
-  
+  <link rel="stylesheet" href="index.css">
 </head>
-
 <body>
-
-
-
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
   <a class="navbar-brand fw-bold">ßunkr</a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -47,7 +37,6 @@
   </div>
 </nav>
 
-<!-- Dashboard -->
 <div class="container my-5 section active" id="dashboard">
   <div class="row g-4">
     <div class="col-md-4">
@@ -61,7 +50,6 @@
     </div>
   </div>
   <div class="row mt-4">
-    <!-- Weekly Progress Card -->
     <div class="col-md-6">
       <div class="card dashboard-card">
         <div class="card-body">
@@ -71,7 +59,6 @@
       </div>
     </div>
 
-    <!-- Attendance Streak Card -->
     <div class="col-md-3">
       <div class="card dashboard-card">
         <div class="card-body text-center">
@@ -85,7 +72,6 @@
       </div>
     </div>
 
-    <!-- Quick Actions Card -->
     <div class="col-md-3">
       <div class="card dashboard-card">
         <div class="card-body">
@@ -104,7 +90,6 @@
   </div>
 </div>
 
-<!-- Attendance Entry -->
 <div class="container my-5 section" id="entry">
   <h3 class="mb-4">Attendance Entry</h3>
   <form class="mb-4">
@@ -118,7 +103,6 @@
   </form>
 </div>
 
-<!-- Bunk Calculator Section -->
 <div class="container my-5 section" id="bunk">
   <h3 class="mb-4">Bunk Calculator</h3>
   <div class="card p-4">
@@ -161,7 +145,6 @@
   </div>
 </div>
 
-<!-- Alerts -->
 <div class="container my-5 section" id="alerts">
   <h3 class="mb-4">Reminders & Alerts</h3>
   <div class="form-check form-switch mb-3">
@@ -171,11 +154,8 @@
   <div id="alertContainer"></div>
 </div>
 
-<!-- Schedule Section -->
 <div class="container my-5 section" id="schedule">
     <h3 class="mb-4">Class Schedule</h3>
-    
-    <!-- Schedule Form -->
     <form id="scheduleForm">
         <div class="row g-3">
             <div class="col-md-3">
@@ -203,14 +183,12 @@
         </div>
     </form>
 
-    <!-- Schedule Canvas -->
     <div class="card">
         <div class="card-body">
             <canvas id="scheduleCanvas"></canvas>
         </div>
     </div>
 
-    <!-- Schedule Table -->
     <div class="card mt-4">
         <div class="card-body">
             <div class="table-responsive">
@@ -231,7 +209,6 @@
     </div>
 </div>
 
-<!-- Graph -->
 <div class="container my-5 section" id="graph">
   <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
   <canvas id="attendanceChart" height="80"></canvas>
@@ -241,17 +218,12 @@
   </div>
 </div>
 
-<!-- About Us -->
 <div class="container-fluid section" id="about">
   <div class="about-wrapper">
     <h2 class="text-center mb-5">About The Team</h2>
-    
-    <!-- 3D Container with increased height -->
     <div class="about-3d-container">
       <canvas id="about3DCanvas"></canvas>
     </div>
-    
-    <!-- Team Info Cards -->
     <div class="team-info mt-5">
       <div class="row g-4">
         <div class="col-md-4">
@@ -277,20 +249,15 @@
   </div>
 </div>
 
-<!-- Game Zone -->
 <div class="container my-5 section" id="game-zone">
   <h3 class="mb-4">Game Zone 🎮</h3>
-  
-  <!-- Game Navigation -->
   <div class="nav nav-tabs mb-4" id="gamesTabs" role="tablist">
     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#screenPaint">Screen Paint</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pokemonSearch">Pokemon Search</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#quizTime">Quiz Time</button>
   </div>
 
-  <!-- Games Content -->
   <div class="tab-content" id="gamesContent">
-    <!-- Screen Paint -->
     <div class="tab-pane fade show active" id="screenPaint">
       <div class="card game-card">
         <div class="card-body">
@@ -312,7 +279,6 @@
       </div>
     </div>
 
-    <!-- Pokemon Search -->
     <div class="tab-pane fade" id="pokemonSearch">
       <div class="card game-card">
         <div class="card-body">
@@ -329,20 +295,16 @@
       </div>
     </div>
 
-    <!-- Quiz Time -->
     <div class="tab-pane fade" id="quizTime">
       <div class="card game-card">
         <div class="card-body">
           <h4 class="card-title">Quiz Time</h4>
-          <div id="quiz-container">
-            <!-- Quiz content will be loaded here -->
-          </div>
+          <div id="quiz-container"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Color Modal -->
   <div class="modal fade" id="colorModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -362,9 +324,7 @@
   </div>
 </div>
 
-<!-- JavaScript -->
 <script src="index.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

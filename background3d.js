@@ -31,7 +31,6 @@ class ParticleBackground {
     }
 
     init() {
-        // Setup renderer
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.domElement.style.position = 'fixed';
@@ -40,17 +39,13 @@ class ParticleBackground {
         this.renderer.domElement.style.zIndex = '-1';
         document.body.prepend(this.renderer.domElement);
 
-        // Setup camera
         this.camera.position.z = 30;
 
-        // Create particles
         this.createParticles();
         
-        // Event listeners
         window.addEventListener('resize', () => this.onWindowResize());
         window.addEventListener('mousemove', (e) => this.onMouseMove(e));
         
-        // Start animation
         this.animate();
     }
 
@@ -93,7 +88,6 @@ class ParticleBackground {
         const positions = this.particles.geometry.attributes.position.array;
         const maxDistance = 10;
 
-        // Clear old lines and their resources
         this.links.forEach(line => {
             this.scene.remove(line);
             if (line.geometry) {
@@ -107,19 +101,16 @@ class ParticleBackground {
         });
         this.links = [];
 
-        // Update particle positions
         for (let i = 0; i < this.particleCount; i++) {
             positions[i * 3] += this.velocities[i].x;
             positions[i * 3 + 1] += this.velocities[i].y;
             positions[i * 3 + 2] += this.velocities[i].z;
 
-            // Boundary check
             if (Math.abs(positions[i * 3]) > 25) this.velocities[i].x *= -1;
             if (Math.abs(positions[i * 3 + 1]) > 25) this.velocities[i].y *= -1;
             if (Math.abs(positions[i * 3 + 2]) > 25) this.velocities[i].z *= -1;
         }
 
-        // Create links between nearby particles
         for (let i = 0; i < this.particleCount; i++) {
             const p1 = new THREE.Vector3(
                 positions[i * 3],
@@ -180,17 +171,14 @@ class ParticleBackground {
     cleanup() {
         this.isDestroyed = true;
 
-        // Stop animation loop
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
 
-        // Remove event listeners
         window.removeEventListener('resize', this.onWindowResize.bind(this));
         window.removeEventListener('mousemove', this.onMouseMove.bind(this));
 
-        // Dispose of particle resources
         if (this.particles) {
             if (this.particles.geometry) {
                 this.particles.geometry.dispose();
@@ -200,7 +188,6 @@ class ParticleBackground {
             }
         }
 
-        // Dispose of line resources
         this.lineGeometries.forEach(geometry => {
             geometry.dispose();
         });
@@ -208,7 +195,6 @@ class ParticleBackground {
             material.dispose();
         });
 
-        // Clear arrays and sets
         this.links = [];
         this.velocities = [];
         this.geometries.clear();
@@ -216,13 +202,11 @@ class ParticleBackground {
         this.lineGeometries.clear();
         this.lineMaterials.clear();
 
-        // Clear scene
         while(this.scene.children.length > 0) { 
             const object = this.scene.children[0];
             this.scene.remove(object);
         }
 
-        // Dispose of renderer
         if (this.renderer) {
             this.renderer.dispose();
             const canvas = this.renderer.domElement;
@@ -231,7 +215,6 @@ class ParticleBackground {
             }
         }
 
-        // Clear references
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -247,6 +230,5 @@ class ParticleBackground {
     }
 }
 
-// Create and export background instance
 const background = new ParticleBackground();
 export default background;

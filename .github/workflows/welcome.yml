@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send greeting message for new contributor
-        if: github.event.pull_request.user.login != 'github-actions[bot]'  # Prevents greeting GitHub actions bot.
+        if: github.event.pull_request.user.login != 'github-actions[bot]'
         run: |
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d '{"body":"Thanks for adding something and improving us! 🙌 We appreciate your contribution!"}' \

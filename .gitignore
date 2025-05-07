@@ -1,27 +1,18 @@
-# Ignore compiled binary files
 *.exe
 *.out
 *.o
 *.obj
 *.dll
 *.so
-
-# Ignore build directories
 /build/
 /dist/
-
-# Ignore editor and system-specific files
 *.log
 *.tmp
 *.swp
 .DS_Store
 Thumbs.db
-
-# Ignore CMake files
 CMakeCache.txt
 CMakeFiles/
-
-# Ignore user-specific config files
 *.vcxproj
 *.vcxproj.user
 *.code-workspace
