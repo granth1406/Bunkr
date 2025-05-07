@@ -281,3 +281,61 @@ box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     padding: 6px 12px;
     cursor: pointer;
 }
+
+/* About Section Styles */
+.about-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.about-3d-container {
+    height: 600px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+#about3DCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+.team-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+}
+
+.team-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.team-card p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Dark Mode Adjustments */
+.dark-mode .team-card {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Neon Mode Adjustments */
+.neon-mode .team-card {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px var(--primary-color);
+}

@@ -81,11 +81,21 @@ function updateRemoveDropdown() {
 }
 
 function setTheme(theme) {
-  localStorage.setItem('theme', theme);
   document.body.classList.remove('dark-mode', 'neon-mode');
   if (theme === 'dark') document.body.classList.add('dark-mode');
   else if (theme === 'neon') document.body.classList.add('neon-mode');
-  chainBackground.updateTheme(theme);
+  
+  // Update background theme with proper cleanup
+  import('./background3d.js').then(module => {
+      if (window.currentBackground) {
+          window.currentBackground.cleanup();
+      }
+      window.currentBackground = module.default;
+      window.currentBackground.updateTheme(theme);
+  });
+  
+  // Save theme preference
+  localStorage.setItem('theme', theme);
 }
 
 function showAlerts() {
@@ -213,11 +223,16 @@ links.forEach(link => {
       section.classList.remove('active', 'fade-in');
       if (section.id === target) {
         section.classList.add('active', 'fade-in');
+        
+        // Cleanup 3D effects when switching away from sections
+        if (target !== 'about' && window.about3D) {
+            window.about3D.cleanup();
+            window.about3D = null;
+        }
       }
     });
   });
 });
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const screenPaint = document.querySelector('.screen-paint'); // Scoped to the paint game section
@@ -262,9 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
     screenPaint.querySelector(".modal button:nth-child(1)").addEventListener("click", submitColor);
     screenPaint.querySelector(".modal button:nth-child(2)").addEventListener("click", closeModal);
 });
-
-// Add at the end of your existing JavaScript
-const chainBackground = new ChainBackground();
 
 class ScheduleManager {
     constructor() {
@@ -506,4 +518,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ...existing initialization code...
     initWeeklyProgress();
     updateStreak();
+    import('./background3d.js').then(module => {
+        window.currentBackground = module.default;
+    });
+});
+
+// Add window cleanup
+window.addEventListener('beforeunload', () => {
+    if (window.about3D) {
+        window.about3D.cleanup();
+    }
+    if (window.currentBackground) {
+        window.currentBackground.cleanup();
+    }
 });
