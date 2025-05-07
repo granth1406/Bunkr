@@ -91,7 +91,5 @@ See the [LICENSE](./LICENSE) file for full license text.
 
 Feel free to ⭐ star the repo, fork it, and contribute!
 
-```
 
-Let me know if you’d like this saved as a file or if you want to embed your screenshots directly into the repo via a /screenshots folder.
-```
+
