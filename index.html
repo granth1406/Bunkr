@@ -4,277 +4,365 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ßunkr</title>
+
+  <!-- Bootstrap & Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f0f2f5;
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-    .card {
-      animation: zoomIn 0.6s ease-in-out both;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-      border: none;
-    }
-    @keyframes zoomIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .hover-scale:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease-in-out;
-    }
-    .dark-mode {
-      background-color: #121212;
-      color: #ffffff;
-    }
-    .dark-mode .card {
-      background-color: #1f1f1f;
-      color: #ffffff;
-    }
-    .neon-mode {
-      background-color: #050505;
-      color: #00ffff;
-    }
-    .neon-mode .card {
-      background-color: #111;
-      color: #00ffff;
-      box-shadow: 0 0 20px #00ffff;
-    }
-    .progress-bar {
-      transition: width 0.6s ease;
-    }
-    .bounce {
-      animation: bounce 1.5s infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .glow {
-      box-shadow: 0 0 12px #00ffff;
-    }
-    .theme-switch {
-      display: flex;
-      gap: 10px;
-    }
-    .theme-switch button {
-      border-radius: 50px;
-      font-weight: 600;
-    }
-    table.table td {
-      vertical-align: middle;
-    }
-    h3 {
-      font-weight: 600;
-      border-left: 5px solid #0d6efd;
-      padding-left: 10px;
-    }
-    .navbar-brand {
-      font-size: 1.5rem;
-    }
-    .navbar-nav .nav-link {
-      font-weight: 500;
-    }
-    input.form-control {
-      border-radius: 10px;
-      box-shadow: none;
-    }
-    button.btn {
-      border-radius: 12px;
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="background3d.js" type="module"></script>
+  <script src="about3D.js" type="module"></script>
+
+  <!-- CSS File -->
+   <link rel="stylesheet" href="index.css">
+  
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-    <a class="navbar-brand fw-bold" href="#">ßunkr</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="#entry">Entry</a></li>
-        <li class="nav-item"><a class="nav-link" href="#bunk">Bunk Calculator</a></li>
-        <li class="nav-item"><a class="nav-link" href="#alerts">Alerts</a></li>
-        <li class="nav-item"><a class="nav-link" href="#schedule">Schedule</a></li>
-        <li class="nav-item"><a class="nav-link" href="#graph">Graph</a></li>
-      </ul>
-      <div class="theme-switch ms-3">
-        <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
-        <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
-        <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
-      </div>
-    </div>
-  </nav>
 
-  <!-- Dashboard -->
-  <div class="container my-5" id="dashboard">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Total Attendance</h5>
-          <h2 id="totalPercentage">0%</h2>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+  <a class="navbar-brand fw-bold">ßunkr</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" data-target="dashboard">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="entry">Entry</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="bunk">Bunk Calculator</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="alerts">Alerts</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="schedule">Schedule</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="graph">Graph</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="about">AboutUs</a></li>
+      <li class="nav-item"><a class="nav-link" data-target="game-zone">More</a></li>
+    </ul>
+    <div class="theme-switch ms-3">
+      <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
+      <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
+      <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Dashboard -->
+<div class="container my-5 section active" id="dashboard">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Total Attendance</h5><h2 id="totalPercentage">0%</h2></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Safe Bunk Limit</h5><h2 id="safeBunk">0 Classes</h2></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-4 text-center"><h5>Upcoming Class</h5><p>2:00 PM - OS</p></div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <!-- Weekly Progress Card -->
+    <div class="col-md-6">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <h5 class="card-title">Weekly Progress</h5>
+          <canvas id="weeklyProgressChart"></canvas>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Safe Bunk Limit</h5>
-          <h2 id="safeBunk">0 Classes</h2>
+    </div>
+
+    <!-- Attendance Streak Card -->
+    <div class="col-md-3">
+      <div class="card dashboard-card">
+        <div class="card-body text-center">
+          <h5 class="card-title">Current Streak</h5>
+          <div class="streak-display">
+            <h2 id="streakCount">0</h2>
+            <p>Days</p>
+            <div class="streak-flame"></div>
+          </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card p-4 text-center">
-          <h5>Upcoming Class</h5>
-          <p>2:00 PM - OS</p>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="col-md-3">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <h5 class="card-title">Quick Actions</h5>
+          <div class="quick-actions d-grid gap-2">
+            <button class="btn btn-primary" onclick="exportAttendance()">
+              📊 Export Report
+            </button>
+            <button class="btn btn-info" onclick="showStats()">
+              📈 View Analytics
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Attendance Entry -->
-  <div class="container my-5" id="entry">
-    <h3 class="mb-4">Attendance Entry</h3>
-    <form class="mb-4">
-      <div class="row g-3">
-        <div class="col-md-4"><input id="subject" type="text" class="form-control" placeholder="Subject"/></div>
-        <div class="col-md-4"><input id="totalClasses" type="number" class="form-control" placeholder="Total Classes"/></div>
-        <div class="col-md-4"><input id="attendedClasses" type="number" class="form-control" placeholder="Attended Classes"/></div>
-      </div>
-      <div class="progress mt-4">
-        <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
-      </div>
-      <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
-    </form>
-  </div>
-
-  <!-- Bunk Calculator -->
-  <div class="container my-5" id="bunk">
-    <h3 class="mb-4">Safe Bunk Calculator</h3>
-    <form>
-      <div class="row g-3">
-        <div class="col-md-3"><input type="number" id="requiredPercent" class="form-control" placeholder="Required %"></div>
-        <div class="col-md-3"><input type="number" id="bunkTotal" class="form-control" placeholder="Total Classes"></div>
-        <div class="col-md-3"><input type="number" id="bunkAttended" class="form-control" placeholder="Attended"></div>
-        <div class="col-md-3"><div class="output fs-4" id="bunkResult">Can bunk: <span id="bunkNum">0</span> classes</div></div>
-      </div>
-    </form>
-  </div>
-
-  <!-- Alerts -->
-  <div class="container my-5" id="alerts">
-    <h3 class="mb-4">Reminders & Alerts</h3>
-    <div class="form-check form-switch mb-3">
-      <input class="form-check-input" type="checkbox" id="toggleAlerts">
-      <label class="form-check-label" for="toggleAlerts">Enable Alerts</label>
+<!-- Attendance Entry -->
+<div class="container my-5 section" id="entry">
+  <h3 class="mb-4">Attendance Entry</h3>
+  <form class="mb-4">
+    <div class="row g-3">
+      <div class="col-md-4"><input id="subject" type="text" class="form-control" placeholder="Subject"/></div>
+      <div class="col-md-4"><input id="totalClasses" type="number" class="form-control" placeholder="Total Classes"/></div>
+      <div class="col-md-4"><input id="attendedClasses" type="number" class="form-control" placeholder="Attended Classes"/></div>
     </div>
-    <div class="card p-3">
-      <h5>⚠️ Low Attendance</h5>
-      <p>You're at 74%. Attend the next 2 classes to stay above 75%.</p>
+    <div class="progress mt-4"><div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div></div>
+    <button type="button" class="btn btn-primary mt-3 hover-scale" onclick="syncAttendance()">🔄 Sync with Portal</button>
+  </form>
+</div>
+
+<!-- Bunk Calculator Section -->
+<div class="container my-5 section" id="bunk">
+  <h3 class="mb-4">Bunk Calculator</h3>
+  <div class="card p-4">
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label for="requiredPercent" class="form-label">Required Attendance Percentage</label>
+        <input type="number" id="requiredPercent" class="form-control" placeholder="75" value="75" min="1" max="100">
+      </div>
+      <div class="col-md-6">
+        <label for="totalSemClasses" class="form-label">Total Classes in Semester</label>
+        <input type="number" id="totalSemClasses" class="form-control" placeholder="Total classes in semester">
+      </div>
+      <div class="col-md-6">
+        <label for="classesSoFar" class="form-label">Classes Conducted So Far</label>
+        <input type="number" id="classesSoFar" class="form-control" placeholder="Classes conducted so far">
+      </div>
+      <div class="col-md-6">
+        <label for="attendedSoFar" class="form-label">Classes Attended So Far</label>
+        <input type="number" id="attendedSoFar" class="form-control" placeholder="Classes attended so far">
+      </div>
+    </div>
+    <button class="btn btn-primary hover-scale" id="calcBunk">Calculate Bunkable Classes</button>
+    
+    <div class="card mt-4 p-3" id="bunkResult" style="display: none;">
+      <h5 class="mb-3">Results</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Current Attendance:</strong> <span id="currentPercent">0</span>%</p>
+          <p><strong>Classes you can bunk:</strong> <span id="bunkNum">0</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Safe bunk limit:</strong> <span id="safeBunkLimit">0</span> classes</p>
+          <p><strong>Attendance if you bunk all:</strong> <span id="finalPercent">0</span>%</p>
+        </div>
+      </div>
+      <div class="progress mt-2">
+        <div id="bunkProgressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- Schedule -->
-  <div class="container my-5" id="schedule">
+<!-- Alerts -->
+<div class="container my-5 section" id="alerts">
+  <h3 class="mb-4">Reminders & Alerts</h3>
+  <div class="form-check form-switch mb-3">
+    <input class="form-check-input" type="checkbox" id="toggleAlerts" checked>
+    <label class="form-check-label" for="toggleAlerts">Enable Alerts</label>
+  </div>
+  <div id="alertContainer"></div>
+</div>
+
+<!-- Schedule Section -->
+<div class="container my-5 section" id="schedule">
     <h3 class="mb-4">Class Schedule</h3>
-    <table class="table table-bordered text-center">
-      <thead>
-        <tr><th>Day</th><th>9-10</th><th>10-11</th><th>11-12</th><th>12-1</th><th>2-3</th><th>3-4</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Mon</td><td>OS</td><td colspan="2">DE&T</td><td>DECA</td><td colspan="2">CP Lab</td></tr>
-        <tr><td>Tue</td><td>DE&T</td><td colspan="2">DECA Lab</td><td>DECA</td><td colspan="2">CP</td></tr>
-        <tr><td>Wed</td><td colspan="2">CP Lab</td><td>--</td><td>SCM Lab</td><td colspan="2">--</td></tr>
-        <tr><td>Thu</td><td>DECA</td><td>DE&T</td><td>OS</td><td>--</td><td colspan="2">SCM Lab</td></tr>
-        <tr><td>Fri</td><td>--</td><td>DE&T</td><td>CP</td><td>--</td><td colspan="2">DECA Lab</td></tr>
-      </tbody>
-    </table>
+    
+    <!-- Schedule Form -->
+    <form id="scheduleForm">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <select class="form-select" id="daySelect" required>
+                    <option value="">Select Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="subjectInput" placeholder="Subject" required>
+            </div>
+            <div class="col-md-2">
+                <input type="time" class="form-control" id="startTime" required>
+            </div>
+            <div class="col-md-2">
+                <input type="time" class="form-control" id="endTime" required>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Add Class</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Schedule Canvas -->
+    <div class="card">
+        <div class="card-body">
+            <canvas id="scheduleCanvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Schedule Table -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Subject</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Graph -->
+<div class="container my-5 section" id="graph">
+  <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
+  <canvas id="attendanceChart" height="80"></canvas>
+  <div class="mt-4 d-flex gap-3">
+    <select id="removeSubjectDropdown" class="form-select w-auto"></select>
+    <button class="btn btn-danger" onclick="removeSubject()">Remove</button>
+  </div>
+</div>
+
+<!-- About Us -->
+<div class="container-fluid section" id="about">
+  <div class="about-wrapper">
+    <h2 class="text-center mb-5">About The Team</h2>
+    
+    <!-- 3D Container with increased height -->
+    <div class="about-3d-container">
+      <canvas id="about3DCanvas"></canvas>
+    </div>
+    
+    <!-- Team Info Cards -->
+    <div class="team-info mt-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>Frontend Developer</h3>
+            <p>Building beautiful and responsive user interfaces</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>Backend Developer</h3>
+            <p>Creating robust and scalable server solutions</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="team-card">
+            <h3>UI/UX Designer</h3>
+            <p>Crafting intuitive and engaging user experiences</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Game Zone -->
+<div class="container my-5 section" id="game-zone">
+  <h3 class="mb-4">Game Zone 🎮</h3>
+  
+  <!-- Game Navigation -->
+  <div class="nav nav-tabs mb-4" id="gamesTabs" role="tablist">
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#screenPaint">Screen Paint</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pokemonSearch">Pokemon Search</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#quizTime">Quiz Time</button>
   </div>
 
-  <!-- Attendance Graph -->
-  <div class="container my-5" id="graph">
-    <h3 class="mb-4">📊 Attendance Percentage Graph</h3>
-    <canvas id="attendanceChart" height="100"></canvas>
+  <!-- Games Content -->
+  <div class="tab-content" id="gamesContent">
+    <!-- Screen Paint -->
+    <div class="tab-pane fade show active" id="screenPaint">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Screen Paint</h4>
+          <div class="screen-paint">
+            <div class="root">
+              <div id="clr">
+                <div id="btn-div">
+                  <button class="btn btn-danger mb-2" data-color="red">Red</button>
+                  <button class="btn btn-primary mb-2" data-color="blue">Blue</button>
+                  <button class="btn btn-success mb-2" data-color="green">Green</button>
+                  <button class="btn btn-secondary mb-2" onclick="openColorModal()">Add Color</button>
+                </div>
+              </div>
+              <div id="paint-screen" class="border rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pokemon Search -->
+    <div class="tab-pane fade" id="pokemonSearch">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Pokemon Search</h4>
+          <div class="app-container">
+            <iframe src="https://pokemoninformation.vercel.app/" 
+                    width="100%" 
+                    height="500px" 
+                    style="border:none;"
+                    title="Pokemon Search Game">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Time -->
+    <div class="tab-pane fade" id="quizTime">
+      <div class="card game-card">
+        <div class="card-body">
+          <h4 class="card-title">Quiz Time</h4>
+          <div id="quiz-container">
+            <!-- Quiz content will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    const chartCtx = document.getElementById('attendanceChart').getContext('2d');
-    let attendanceChart = new Chart(chartCtx, {
-      type: 'bar',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Attendance %',
-          backgroundColor: '#0d6efd',
-          borderColor: '#0d6efd',
-          borderWidth: 1,
-          data: []
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        },
-        scales: {
-          y: { beginAtZero: true, max: 100 }
-        }
-      }
-    });
+  <!-- Color Modal -->
+  <div class="modal fade" id="colorModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a Color</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" id="color-input" placeholder="Enter color name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitColor()">Add Color</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    function syncAttendance() {
-      const total = parseInt(document.getElementById("totalClasses").value);
-      const attended = parseInt(document.getElementById("attendedClasses").value);
-      const subject = document.getElementById("subject").value;
-      if (!isNaN(total) && !isNaN(attended) && subject.trim() !== "" && total > 0) {
-        const percentage = Math.min(Math.round((attended / total) * 100), 100);
-        document.getElementById("progressBar").style.width = percentage + "%";
-        document.getElementById("progressBar").innerText = percentage + "%";
-        document.getElementById("totalPercentage").innerText = percentage + "%";
-        let safeBunks = Math.floor(((attended - (0.75 * total)) / 0.25));
-        document.getElementById("safeBunk").innerText = safeBunks > 0 ? `${safeBunks} Classes` : "0 Classes";
+<!-- JavaScript -->
+<script src="index.js"></script>
 
-        const labelIndex = attendanceChart.data.labels.indexOf(subject);
-        if (labelIndex >= 0) {
-          attendanceChart.data.datasets[0].data[labelIndex] = percentage;
-        } else {
-          attendanceChart.data.labels.push(subject);
-          attendanceChart.data.datasets[0].data.push(percentage);
-        }
-        attendanceChart.update();
-      }
-    }
-
-    function setTheme(theme) {
-      localStorage.setItem('theme', theme);
-      document.body.classList.remove('dark-mode', 'neon-mode');
-      if (theme === 'dark') document.body.classList.add('dark-mode');
-      else if (theme === 'neon') document.body.classList.add('neon-mode');
-    }
-
-    window.onload = () => {
-      const theme = localStorage.getItem('theme') || 'light';
-      setTheme(theme);
-    };
-
-    document.querySelectorAll('#requiredPercent, #bunkTotal, #bunkAttended').forEach(input => {
-      input.addEventListener('input', () => {
-        const r = parseFloat(document.getElementById("requiredPercent").value);
-        const t = parseInt(document.getElementById("bunkTotal").value);
-        const a = parseInt(document.getElementById("bunkAttended").value);
-        if (!isNaN(r) && !isNaN(t) && !isNaN(a) && r > 0 && t > 0) {
-          let safe = Math.floor((a - (r / 100) * t) / (1 - (r / 100)));
-          document.getElementById("bunkNum").innerText = safe >= 0 ? safe : 0;
-        }
-      });
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
