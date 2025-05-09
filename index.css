@@ -335,3 +335,14 @@ box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     border-color: var(--primary-color);
     box-shadow: 0 0 20px var(--primary-color);
 }
+
+.card-body canvas#scheduleCanvas {
+    max-height: 350px;
+    width: 100%;
+    object-fit: contain;
+}
+
+#schedule .card {
+    max-width: 900px;
+    margin: 0 auto;
+}

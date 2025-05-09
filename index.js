@@ -307,8 +307,9 @@ class ScheduleManager {
     }
 
     resizeCanvas() {
+        // Set canvas width based on container width
         this.canvas.width = this.canvas.parentElement.offsetWidth;
-        this.canvas.height = 400;
+        this.canvas.height = 350; // Match the CSS max-height
         this.render();
     }
 
@@ -322,7 +323,8 @@ class ScheduleManager {
 
     drawGrid() {
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        const hours = ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+        // Adjust hours to 9 AM - 4 PM
+        const hours = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
         
         this.ctx.font = '12px Inter';
         this.ctx.fillStyle = '#666';
@@ -330,8 +332,9 @@ class ScheduleManager {
         const timeWidth = 50;
         const dayHeight = 30;
         const cellWidth = (this.canvas.width - timeWidth) / 5;
-        const cellHeight = (this.canvas.height - dayHeight) / 6;
+        const cellHeight = (this.canvas.height - dayHeight) / hours.length;
 
+        // Draw hours
         hours.forEach((hour, i) => {
             const y = dayHeight + i * cellHeight;
             this.ctx.fillText(hour, 5, y + 15);
@@ -342,6 +345,7 @@ class ScheduleManager {
             this.ctx.stroke();
         });
 
+        // Draw days
         days.forEach((day, i) => {
             const x = timeWidth + i * cellWidth;
             this.ctx.fillText(day, x + 5, 20);
@@ -365,8 +369,8 @@ class ScheduleManager {
             const [endHour, endMinute] = entry.endTime.split(':').map(Number);
 
             const x = timeWidth + dayIndex * cellWidth;
-            const y = dayHeight + ((startHour - 8) + startMinute/60) * ((this.canvas.height - dayHeight) / 10);
-            const height = ((endHour - startHour) + (endMinute - startMinute)/60) * ((this.canvas.height - dayHeight) / 10);
+            const y = dayHeight + ((startHour - 9) + startMinute/60) * ((this.canvas.height - dayHeight) / 7);
+            const height = ((endHour - startHour) + (endMinute - startMinute)/60) * ((this.canvas.height - dayHeight) / 7);
 
             this.ctx.fillStyle = this.colors[index % this.colors.length];
             this.ctx.globalAlpha = 0.7;
