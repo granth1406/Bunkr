@@ -206,10 +206,17 @@ links.forEach(link => {
   link.addEventListener('click', () => {
     const target = link.getAttribute('data-target');
     sections.forEach(section => {
-      section.classList.remove('active', 'fade-in');
+      section.classList.remove('active', 'fade-in', 'fade-slide-in');
       if (section.id === target) {
-        section.classList.add('active', 'fade-in');
-        
+        section.classList.add('active');
+        // Animate Attendance Entry section
+        if (section.id === 'entry') {
+          // Force reflow to restart animation if needed
+          void section.offsetWidth;
+          section.classList.add('fade-slide-in');
+        } else {
+          section.classList.add('fade-in');
+        }
         if (target !== 'about' && window.about3D) {
             window.about3D.cleanup();
             window.about3D = null;

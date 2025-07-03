@@ -11,6 +11,54 @@
   <script src="background3d.js" type="module"></script>
   <script src="about3D.js" type="module"></script>
   <link rel="stylesheet" href="index.css">
+  <style>
+    .fade-slide-in {
+      animation: fadeSlideIn 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @keyframes fadeSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <style>
+    .theme-btn {
+      background: #f8f9fa;
+      border: 1.5px solid #dee2e6;
+      border-radius: 50%;
+      padding: 0.5rem 0.7rem;
+      font-size: 1.35rem;
+      color: #343a40;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .theme-btn:hover, .theme-btn:focus {
+      background: #e2e6ea;
+      color: #0d6efd;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .theme-btn i {
+      vertical-align: middle;
+    }
+    .theme-btn.neon-btn {
+      color: #0ff;
+      border-color: #0ff;
+      background: #101820;
+      box-shadow: 0 0 8px #0ff99c99;
+    }
+    .theme-btn.neon-btn:hover, .theme-btn.neon-btn:focus {
+      background: #0ff;
+      color: #101820;
+      box-shadow: 0 0 16px #0ff99c;
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
@@ -30,9 +78,9 @@
       <li class="nav-item"><a class="nav-link" data-target="game-zone">More</a></li>
     </ul>
     <div class="theme-switch ms-3">
-      <button class="btn btn-outline-dark bounce" onclick="setTheme('light')">🌞</button>
-      <button class="btn btn-outline-dark bounce" onclick="setTheme('dark')">🌙</button>
-      <button class="btn btn-outline-info bounce glow" onclick="setTheme('neon')">🔵</button>
+      <button class="btn theme-btn me-1" onclick="setTheme('light')" title="Light Theme"><i class="bi bi-sun-fill"></i></button>
+      <button class="btn theme-btn me-1" onclick="setTheme('dark')" title="Dark Theme"><i class="bi bi-moon-stars-fill"></i></button>
+      <button class="btn theme-btn neon-btn" onclick="setTheme('neon')" title="Neon Theme"><i class="bi bi-lightning-charge-fill"></i></button>
     </div>
   </div>
 </nav>
